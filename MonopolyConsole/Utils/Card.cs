@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MonopolyConsole.Utils.Card;
+//using static MonopolyConsole.Utils.Card;
 
 namespace MonopolyConsole.Utils
 {
+    public enum CardType { CommunityChest, Chance, Deed };
+
     interface ICard
     {
         //public string Description { get; } //- issue
@@ -22,17 +24,15 @@ namespace MonopolyConsole.Utils
     //}
 
     //- Actually action card now (mostly)
-    internal class Card : ICard
+    internal class ActionCard : ICard
     {
-        public enum CardType { CommunityChest, Chance, Deed };
-
         public CardType Type { get; set; }
         public string Description;
         public bool IsImmediate;
         public Action<Player, Game>? Effect;
 
 
-        public Card(CardType type, string description, bool ImmediateUse, Action<Player, Game>? effect)
+        public ActionCard(CardType type, string description, bool ImmediateUse, Action<Player, Game>? effect)
         {
             Type = type;
             Description = description;

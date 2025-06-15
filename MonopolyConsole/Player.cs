@@ -11,7 +11,10 @@ namespace MonopolyConsole
         public string Name;
         public int Balance;
         //public int NetWorth
-        internal int Position;
+        int Position = 0;
+        public List<Property> Properties = new List<Property>();
+
+        public bool InJail = false;
         
         public Player(string name, int startingBalance)
         {
@@ -23,5 +26,24 @@ namespace MonopolyConsole
         {
             return Name;
         }
+
+        public void Move(int tiles, Game game)
+        {
+            Position = (Position + tiles) % game.Board.Tiles.Length;
+            if (Position < 0)
+                Position += game.Board.Tiles.Length; // backwards wrap
+            game.Board.Tiles[Position].LandOn(this, game);
+        }
+
+        public void MoveTo(int posMove, Game game)
+        {
+            Position = posMove % game.Board.Tiles.Length;
+            game.Board.Tiles[Position].LandOn(this, game);
+        }
+
+        // Roll
+        // Trade, Mortgage, unmortgage, quit, sendmoney
+        // Play ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     }
 }

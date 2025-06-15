@@ -23,10 +23,11 @@ namespace MonopolyConsole
             int numProperties = 10;
             Players = new Player[numPlayers];
             Properties = new Property[numProperties];
+            Board board = new Board();
 
             // Initialize game
             Console.WriteLine("What is the starting balance of this game");
-            StartingBalance = Convert.ToInt32(Console.ReadLine()); //- handle error
+            StartingBalance = Convert.ToInt32(Console.ReadLine()); //- handle errors
 
             // Create Players
             for (int i = 0; i < numPlayers; i++)
@@ -34,6 +35,7 @@ namespace MonopolyConsole
                 Players[i] = CreatePlayer(i);
             }
             RoleCall();
+            Start();
         }
 
         public Player CreatePlayer(int index)
@@ -57,7 +59,13 @@ namespace MonopolyConsole
 
         public void Start()
         {
-
+            for (int i = 0; i < 40; i++)
+                for (int j = 0; j < Players.Length;i++)
+                {
+                    Console.WriteLine($"{Players[j]}'s turn to play"); //- remove s if end in s
+                    int diceRoll = RollDice(2);
+                    Players[j].Move(diceRoll, this);
+                }
         }
 
         public int GetPosition(string place, int pos = 0)
@@ -68,16 +76,16 @@ namespace MonopolyConsole
                 //- More advanced oneslike nearest station
                 _ => -1
             };
-
         }
 
-        public void RollDice(int numDice = 2)
+        public int RollDice(int numDice = 2)
         {
-
+            //- for now
+            return Random.Next(0, numDice * 6);
         }
     }
 
     // Cool chances, roll 1 dice, 2, 3
-    // No taxes or finesfrom friends for next one
+    // No taxes or fines from friends for next one - how to invoke something next turn?
     // No hotels/houses for next one
 }
