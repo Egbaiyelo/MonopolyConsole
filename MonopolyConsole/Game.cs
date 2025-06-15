@@ -23,7 +23,7 @@ namespace MonopolyConsole
             int numProperties = 10;
             Players = new Player[numPlayers];
             Properties = new Property[numProperties];
-            Board board = new Board();
+            Board = new Board();
 
             // Initialize game
             Console.WriteLine("What is the starting balance of this game");
@@ -60,11 +60,12 @@ namespace MonopolyConsole
         public void Start()
         {
             for (int i = 0; i < 40; i++)
-                for (int j = 0; j < Players.Length;i++)
+                for (int j = 0; j < Players.Length; j++)
                 {
                     Console.WriteLine($"{Players[j]}'s turn to play"); //- remove s if end in s
                     int diceRoll = RollDice(2);
                     Players[j].Move(diceRoll, this);
+                    Console.ReadLine();
                 }
         }
 
@@ -81,6 +82,7 @@ namespace MonopolyConsole
         public int RollDice(int numDice = 2)
         {
             //- for now
+            //- add info methods to all
             return Random.Next(0, numDice * 6);
         }
     }

@@ -9,13 +9,17 @@ namespace MonopolyConsole.Utils
 {
     abstract class Tile
     {
-        //public string Name;
-        public abstract void LandOn(Player player, Game game);
+        public virtual string Name { get; internal set; } = "Tile";
+
+        public virtual void LandOn(Player player, Game game)
+        {
+            Console.WriteLine($"{player.Name} has landed on a {Name}");
+        }
     }
 
     internal class PropertyTile : Tile
     {
-        public string Name;
+        public override string Name { get; internal set; }
         public int Cost;
         public int Rent;
         public Property Property;
@@ -23,10 +27,10 @@ namespace MonopolyConsole.Utils
 
         public PropertyTile(Property property)
         {
-            Name = property.Name;
+            Property = property;
+            Name = property.Name + " Tile"; //- Do I need this
             Cost = property.Cost;
             Rent = property.Rent;
-            Property = property;
 
             if (Property.Owner != null)
             {
@@ -36,10 +40,11 @@ namespace MonopolyConsole.Utils
 
         public override void LandOn(Player p, Game g)
         {
+            Console.WriteLine($"{p.Name} lands on {Property.Name}");
             if (Owner is null && p.Balance >= Cost)
             {
                 //- Maybe get data from property and tile is just wrapper class
-                Console.WriteLine("Do you wish to buy {0} for {1} (Y/N)", Name, Cost);
+                Console.WriteLine("Do you wish to buy {0} for {1} (Y/N)", Property.Name, Cost);
                 string response = Console.ReadLine();
                 if (response.ToUpper().Contains('Y'))
                 {
@@ -60,48 +65,65 @@ namespace MonopolyConsole.Utils
         }
     }
 
-    //- Might merge the two
-    internal class ChanceTile : Tile
+    internal class ActionTile : Tile
     {
-        public string Name = "";
-        public ActionCard Chance;
+        public override string Name { get; internal set; }
+        public CardType CardType;
+        public ActionCard ActionCard; //- Need to link to factory instead
 
-        public ChanceTile(ActionCard card)
+        public ActionTile(CardType cardType, ActionCard card)
         {
-            if (card.Type != CardType.Chance)
-                throw new ArgumentException("Card name:{0}, must be of type Chance ", nameof(card));
-            Chance = card;
+            //if (cardType != CardType.CommunityChest || CardType.Chance)
+            //    throw 
+            CardType = cardType;
+            ActionCard = card;
+            Name = cardType == CardType.Chance ? "Chance Tile" : "CommunityChest Tile";
         }
 
         public override void LandOn(Player player, Game game)
         {
-            Chance.Effect.Invoke(player, game);
+            Console.WriteLine($"{player.Name} lands on a {Name}");
+            ActionCard.Effect.Invoke(player, game);
         }
     }
 
-    internal class CommunityChestTile : Tile
-    {
-        public string Name = "";
-        public ActionCard Chest;
-
-        public CommunityChestTile(ActionCard card)
-        {
-            if (card.Type != CardType.CommunityChest)
-                throw new ArgumentException("Card must be of type CommunityChest", nameof(card));
-            Chest = card;
-        }
-
-        public override void LandOn(Player player, Game game)
-        {
-            Chest.Effect.Invoke(player, game);
-        }
-    }
-
+    //- to merge with action tile and action tile to be actioncard tile
     internal class EdgeTile : Tile
     {
+        public override string Name { get; internal set; }
+        public Action<Player, Game>? Effect;
+
+        public EdgeTile(string name, Action<Player, Game>? effect)
+        {
+            Name = name;
+            Effect = effect;
+        }
+
         public override void LandOn(Player player, Game game)
         {
-
+            Console.WriteLine($"{player.Name} lands on the {Name}");
+            Effect.Invoke(player, game);
         }
     }
+
+
+
+    internal class TaxTile : Tile
+    {
+        public override string Name { get; internal set; }
+        private int Tax;
+        public TaxTile(int tax)
+        {
+            Tax = tax;
+            Name = "Tax Tile";
+        }
+        public override void LandOn(Player player, Game game)
+        {
+            Console.WriteLine($"{player.Name} lands on a {Name}");
+            Console.WriteLine($"Pay {Tax}");
+            player.Balance -= Tax;            
+        }
+    }
+
+    //internal class StationTile
 }

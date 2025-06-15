@@ -14,6 +14,7 @@ namespace MonopolyConsole.Utils
         //public string Description { get; } //- issue
         CardType Type { get; }
     }
+    //- Make IGameEvent I guess for effects
 
     //- plan
     //interface IDeedCard : ICard

@@ -29,7 +29,11 @@ namespace MonopolyConsole
 
         public void Move(int tiles, Game game)
         {
-            Position = (Position + tiles) % game.Board.Tiles.Length;
+            // Cash from Go
+            int toTile = Position + tiles;
+            if (toTile >= game.Board.Tiles.Length) { Balance += 200; }
+
+            Position = (toTile) % game.Board.Tiles.Length;
             if (Position < 0)
                 Position += game.Board.Tiles.Length; // backwards wrap
             game.Board.Tiles[Position].LandOn(this, game);

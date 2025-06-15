@@ -15,7 +15,7 @@ namespace MonopolyConsole
         public int Cost;
         public Color PropertyGroup;
         public Player? Owner;
-        public Property(string name, int rent, int cost)
+        public Property(string name, int cost, int rent)
         {
             Name = name;
             Rent = rent;
