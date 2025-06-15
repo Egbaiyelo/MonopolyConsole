@@ -9,7 +9,7 @@ namespace MonopolyConsole
 {
     internal class Game
     {
-        public Player[] Players;
+        public List<Player> Players;
         public Property[] Properties;
         public Board Board;
         public int StartingBalance = 2000;
@@ -21,7 +21,7 @@ namespace MonopolyConsole
         public Game(int numPlayers)
         {
             int numProperties = 10;
-            Players = new Player[numPlayers];
+            Players = new List<Player>();
             Properties = new Property[numProperties];
             Board = new Board();
 
@@ -32,7 +32,7 @@ namespace MonopolyConsole
             // Create Players
             for (int i = 0; i < numPlayers; i++)
             {
-                Players[i] = CreatePlayer(i);
+                Players.Add(CreatePlayer(i));
             }
             RoleCall();
             Start();
@@ -46,6 +46,17 @@ namespace MonopolyConsole
             return new Player(name, StartingBalance); //- handle ref starting balance (uninit)
         }
 
+        public void RemovePlayer(Player player, string reason)
+        {
+            Console.WriteLine($"{player.Name} is out of the game because they {reason}");
+            Players.Remove(player);
+
+            if (Players.Count == 1)
+            {
+                Console.WriteLine($"{Players[0].Name} has won the game");
+            } else RoleCall();
+        }
+
         public void RoleCall()
         {
             Console.Write("Players ");
@@ -54,13 +65,13 @@ namespace MonopolyConsole
                 Console.Write(p.Name + ", ");
                 //- No comma for last dude
             }
-            Console.WriteLine(" are in the game");
+            Console.WriteLine("\b\b are in the game");
         }
 
         public void Start()
         {
             for (int i = 0; i < 40; i++)
-                for (int j = 0; j < Players.Length; j++)
+                for (int j = 0; j < Players.Count; j++)
                 {
                     Console.WriteLine($"{Players[j]}'s turn to play"); //- remove s if end in s
                     int diceRoll = RollDice(2);

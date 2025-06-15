@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Utils
 {
+    public enum TileType { Property, Station, Utility, CommunityChest, Chance, Edge, Tax };
     abstract class Tile
     {
         public virtual string Name { get; internal set; } = "Tile";
+        public TileType TileType { get; internal set; }
 
         public virtual void LandOn(Player player, Game game)
         {
@@ -31,6 +33,7 @@ namespace MonopolyConsole.Utils
             Name = property.Name + " Tile"; //- Do I need this
             Cost = property.Cost;
             Rent = property.Rent;
+            TileType = TileType.Property;
 
             if (Property.Owner != null)
             {
@@ -57,9 +60,10 @@ namespace MonopolyConsole.Utils
             }
             else if (Owner is not null && Owner != p)
             {
-                p.Balance -= Rent;
-                Owner.Balance += Rent;
-                Console.WriteLine($"{p.Name} pays ${Rent} rent to {Owner.Name}.");
+                int rent = Property.CalculateRent();
+                p.Balance -= rent;
+                Owner.Balance += rent;
+                Console.WriteLine($"{p.Name} pays ${rent} rent to {Owner.Name}.");
             }
             // else just do nothing
         }
@@ -69,6 +73,7 @@ namespace MonopolyConsole.Utils
     {
         public override string Name { get; internal set; }
         public CardType CardType;
+
         public ActionCard ActionCard; //- Need to link to factory instead
 
         public ActionTile(CardType cardType, ActionCard card)
@@ -78,6 +83,7 @@ namespace MonopolyConsole.Utils
             CardType = cardType;
             ActionCard = card;
             Name = cardType == CardType.Chance ? "Chance Tile" : "CommunityChest Tile";
+            TileType = cardType == CardType.Chance ? TileType.Chance : TileType.CommunityChest;
         }
 
         public override void LandOn(Player player, Game game)
@@ -97,6 +103,7 @@ namespace MonopolyConsole.Utils
         {
             Name = name;
             Effect = effect;
+            TileType = TileType.Edge;
         }
 
         public override void LandOn(Player player, Game game)
@@ -112,10 +119,11 @@ namespace MonopolyConsole.Utils
     {
         public override string Name { get; internal set; }
         private int Tax;
-        public TaxTile(int tax)
+        public TaxTile(int tax, string name = "Tax Tile")
         {
             Tax = tax;
-            Name = "Tax Tile";
+            Name = name;
+            TileType = TileType.Tax;
         }
         public override void LandOn(Player player, Game game)
         {
@@ -125,5 +133,16 @@ namespace MonopolyConsole.Utils
         }
     }
 
-    //internal class StationTile
+
+    internal class UtilityTile : PropertyTile
+    {
+        public UtilityTile(Property property) : base(property) { TileType = TileType.Utility; }
+        public int CalculateRent(int diceRoll) => property.Rent * diceRoll;
+    }
+
+
+    internal class StationTile : PropertyTile
+    {
+
+    }
 }

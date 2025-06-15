@@ -10,9 +10,18 @@ namespace MonopolyConsole
     {
         public string Name;
         public int Balance;
-        //public int NetWorth
         int Position = 0;
         public List<Property> Properties = new List<Property>();
+
+        public int NetWorth
+        {
+            get
+            {
+                int propertyValue = Properties.Sum(p => p.CalculateCost());
+                return Balance + propertyValue;
+            }
+        }
+
 
         public bool InJail = false;
         
@@ -48,6 +57,26 @@ namespace MonopolyConsole
         // Roll
         // Trade, Mortgage, unmortgage, quit, sendmoney
         // Play ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        public void Play()
+        {
+            string input = "";
+            while (true && input != "Q")
+            {
 
+            }
+        }
+
+        public void Quit(Game game)
+        {
+            Console.WriteLine("Are you sure you want to quit (Y/N)");
+            string input = Console.ReadLine();
+            if (input == "Y")
+            {
+                Console.WriteLine("This action cannot be undone, do you wish to finalize forfeit (Y/N)");
+                input = Console.ReadLine();
+                if (input == "Y")
+                    game.RemovePlayer(this, "quit");
+            }
+        }
     }
 }
