@@ -1,6 +1,9 @@
 ﻿
 using MonopolyConsole;
 using MonopolyConsole.Utils;
+using System;
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 
 public class Solution
 {
@@ -18,6 +21,17 @@ public class Solution
         //ght.RunQuery();
         //ConsoleDisplay hello = new ConsoleDisplay(["hefwefwfe", "uhwevwefwefw", "weuvwevwe"], true);
         //hello.RunDisplay();
-        Game game = new Game(2);
+
+        //Game game = new Game(2);
+
+        //string javaBotJarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "jbot.jar");
+        //Console.WriteLine(javaBotJarPath);
+
+        BotManager botManager = new BotManager();
+        int botIndex = botManager.Spawn();
+        Console.WriteLine("sending message");
+        string response = botManager.SendMessage(botIndex, "hello");
+        Console.WriteLine("total response " + response);
+
     }
 }

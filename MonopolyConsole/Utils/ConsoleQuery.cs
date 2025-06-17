@@ -56,6 +56,8 @@ namespace MonopolyConsole.Utils
             // Needs to be run immediately after
 
         }
+
+        //- returns number now, it takes options string and returns numbers, dont remember second item rightnot
         public T RunQuery()
         {
             while (true)

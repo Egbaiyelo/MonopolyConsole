@@ -17,8 +17,10 @@ namespace MonopolyConsole
         {
             get
             {
-                int propertyValue = Properties.Sum(p => p.CalculateCost());
-                return Balance + propertyValue;
+                //-
+                //int propertyValue = Properties.Sum(p => p.CalculateCost());
+                //return Balance + propertyValue;
+                return 1;
             }
         }
 

@@ -2,14 +2,14 @@
 
 Finish CardFactory Chance and community Chest
 
-Player play function
+## Player play function
 - mortgage
 - unmortgage
 - quit
 - trade
 - send money
 
-Player property
+## Player property
 - Able to get net worth
 
 Tiles 
@@ -23,3 +23,10 @@ Setter for game balance to trigger bankruptcy event
 More advanced,
 - Use cool chances like 1 die and no pay next round
 - Cancellation tokens 
+
+
+## Changes
+- Console Query takes in number instead and manages the numbers 
+
+
+# Java Bot 

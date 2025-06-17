@@ -16,7 +16,7 @@ namespace MonopolyConsole
         public int Cost;
         public PropertyGroup PropertyGroup;
         public Player? Owner;
-        public Property(string name, int cost, int rent, PropertyGroup group)
+        public Property(string name, int cost, int rent, PropertyGroup group = PropertyGroup.Brown)
         {
             Name = name;
             Rent = rent;
@@ -31,7 +31,9 @@ namespace MonopolyConsole
 
         public virtual int CalculateCost(Game game)
         {
-            return game.Board[Name].CalculateRent();
+            //-
+            //return game.Board[Name].CalculateRent();
+            return -1;
         }
     }
 }

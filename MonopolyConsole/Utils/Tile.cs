@@ -137,12 +137,14 @@ namespace MonopolyConsole.Utils
     internal class UtilityTile : PropertyTile
     {
         public UtilityTile(Property property) : base(property) { TileType = TileType.Utility; }
-        public int CalculateRent(int diceRoll) => property.Rent * diceRoll;
+
+        //-
+        //public int CalculateRent(int diceRoll) => property.Rent * diceRoll;
     }
 
 
-    internal class StationTile : PropertyTile
-    {
+    //internal class StationTile : PropertyTile
+    //{
 
-    }
+    //}
 }
