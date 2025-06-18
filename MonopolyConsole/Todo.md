@@ -5,7 +5,7 @@ Finish CardFactory Chance and community Chest
 ## Player play function
 - mortgage
 - unmortgage
-- quit
+- quit 
 - trade
 - send money
 
@@ -25,8 +25,11 @@ More advanced,
 - Cancellation tokens 
 
 
-## Changes
-- Console Query takes in number instead and manages the numbers 
-
-
 # Java Bot 
+
+
+
+refactor property
+make utility owner counter in utility tile
+make colorgroup counter somehow
+make station counter too or station tile deed has a number for how many owned or something like that.

@@ -9,9 +9,17 @@ namespace MonopolyConsole
     internal class Player
     {
         public string Name;
-        public int Balance;
+        private int balance;
+        public int Balance 
+        {
+            get { return balance; }
+            set { balance = value;  } //- Bankruptcy prompt
+        }
         int Position = 0;
         public List<Property> Properties = new List<Property>();
+
+        internal int StationsOwned;
+        internal int UtilitiesOwned;
 
         public int NetWorth
         {

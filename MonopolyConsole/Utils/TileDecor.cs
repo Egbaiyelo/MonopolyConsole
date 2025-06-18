@@ -6,47 +6,53 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Utils
 {
-    abstract class TileDecorator : Tile
-    {
-        Tile _tile;
 
-        public TileDecorator(Tile tile)
+    abstract class PropertyDecorator : PropertyTile
+    {
+        protected PropertyTile _tile;
+
+        /// <summary>
+        /// No longer in use.
+        /// </summary>
+        /// <param name="tile"></param>
+        public PropertyDecorator(PropertyTile tile) : base(tile.Property)
         {
             _tile = tile;
         }
 
-        public virtual string Name => _tile.Name;
-
+        public override int CalculateRent() => _tile.CalculateRent();
         public override void LandOn(Player player, Game game) => _tile.LandOn(player, game);
-
     }
 
-    internal class HouseDecorator : TileDecorator
+    internal class MortgageDecorator : PropertyDecorator
     {
-        private int _houseCount;
+        public MortgageDecorator(PropertyTile tile) : base(tile) { }
 
-        public HouseDecorator(Tile tile, int houseCount) : base(tile)
-        {
-            _houseCount = houseCount;
-        }
-
-    }
-
-    internal class HotelDecorator : TileDecorator
-    {
-        public HotelDecorator(Tile tile) : base(tile) { }
-
-
-    }
-
-    internal class MortgageDecorator : TileDecorator
-    {
-        public MortgageDecorator(Tile tile) : base(tile) { }
+        public override int CalculateRent() => 0; 
 
         public override void LandOn(Player player, Game game)
         {
             base.LandOn(player, game);
-            Console.Write(" [MORTGAGED]");
+            Console.Write(" [MORTGAGED] No rent applied.");
         }
+    }
+
+    internal class HouseDecorator : PropertyDecorator
+    {
+        private int _houseCount;
+
+        public HouseDecorator(PropertyTile tile, int houseCount) : base(tile)
+        {
+            _houseCount = houseCount;
+        }
+
+        public override int CalculateRent() => _tile.CalculateRent() + (_houseCount * 50);
+    }
+
+    internal class HotelDecorator : PropertyDecorator
+    {
+        public HotelDecorator(PropertyTile tile) : base(tile) { }
+
+        public override int CalculateRent() => _tile.CalculateRent() + 100;
     }
 }

@@ -9,7 +9,7 @@ namespace MonopolyConsole.Utils
 {
     public class ConsolePrinter
     {
-        private int _top;
+        private int _top = Console.CursorTop;
 
         internal void ClearQuery()
         {
@@ -24,7 +24,74 @@ namespace MonopolyConsole.Utils
         }
     }
 
-    internal class ConsoleQuery<T> : ConsolePrinter
+    internal class ConsoleQuery : ConsolePrinter
+    {
+        // Messages
+        private readonly string _prompt;
+        private readonly string _onSuccess;
+        private readonly string _onError;
+
+        // Options
+        private readonly List<string> _options;
+
+        // Printing format
+        private readonly bool _multiLine;
+
+        public ConsoleQuery(
+            string prompt, 
+            List<string> options, 
+            string success, 
+            string error, 
+            bool multiline = false)
+        {
+            _prompt = prompt;
+            _onSuccess = success;
+            _onError = error;
+
+            _options = options;
+            _multiLine = multiline;
+        }
+
+        public int RunQuery() //- or maybe rename to query or ask
+        {
+            while (true)
+            {
+                Console.WriteLine(_prompt + ": ");
+                foreach (var option in _options)
+                {
+                    //- or make delegate if it matters
+                    if (_multiLine)
+                        Console.WriteLine($"- {option}");
+                    else Console.Write($"{option}, ");
+                }
+                if (!_multiLine) Console.WriteLine("\b\b  ");
+
+                try
+                {
+                    int response = int.Parse(Console.ReadLine());
+                    Console.WriteLine($"you chose {response}");
+                    if (response < 1 || response > _options.Count)
+                    {
+                        ClearQuery();
+                        Console.WriteLine($"You chose {response}. Please pick between 1 and {_options.Count}");
+                        continue;
+                    } else {
+                        ClearQuery();
+                        return response;
+                    }
+                }
+                catch (FormatException e)
+                {
+                    // nothing?
+                }
+
+                ClearQuery();
+                Console.WriteLine(_onError);
+            }
+        }
+    }
+
+    internal class ConsolePrompter<T> : ConsolePrinter
     {
         private readonly string _prompt;
         private readonly string _onSuccess;
@@ -36,9 +103,7 @@ namespace MonopolyConsole.Utils
 
         private readonly bool _listFormat;
 
-        private int _top;
-
-        public ConsoleQuery(
+        public ConsolePrompter(
             string prompt, 
             string successMessage,
             string errorMessage,
@@ -51,7 +116,7 @@ namespace MonopolyConsole.Utils
             _options = options;
 
             _listFormat = listFormat;
-            _top = Console.CursorTop;
+            //_top = Console.CursorTop;
 
             // Needs to be run immediately after
 

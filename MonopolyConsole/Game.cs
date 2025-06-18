@@ -38,6 +38,15 @@ namespace MonopolyConsole
             Start();
         }
 
+        //- Decoupling from constructor
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetGame()
+        {
+
+        }
+
         public Player CreatePlayer(int index)
         {
             Console.WriteLine("What is the name of Player {0}", index + 1);
@@ -80,14 +89,16 @@ namespace MonopolyConsole
                 }
         }
 
+        /// <summary>
+        /// 
+        /// Examples: Jail, nearest -> station, utility
+        /// </summary>
+        /// <param name="place"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
         public int GetPosition(string place, int pos = 0)
         {
-            return place.ToLower() switch
-            {
-                "jail" => 10,
-                //- More advanced oneslike nearest station
-                _ => -1
-            };
+            return Board.GetPosition(place, pos);
         }
 
         public int RollDice(int numDice = 2)

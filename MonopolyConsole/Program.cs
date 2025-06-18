@@ -22,16 +22,34 @@ public class Solution
         //ConsoleDisplay hello = new ConsoleDisplay(["hefwefwfe", "uhwevwefwefw", "weuvwevwe"], true);
         //hello.RunDisplay();
 
-        //Game game = new Game(2);
+        Game game = new Game(2);
 
         //string javaBotJarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "jbot.jar");
         //Console.WriteLine(javaBotJarPath);
 
-        BotManager botManager = new BotManager();
-        int botIndex = botManager.Spawn();
-        Console.WriteLine("sending message");
-        string response = botManager.SendMessage(botIndex, "hello");
-        Console.WriteLine("total response " + response);
+        //Testing query
+        //Console.WriteLine("\n\n\nwfe");
+        //ConsoleQuery test = new ConsoleQuery("Hello", new List<string>{ "a", "b", "c" }, "yey", "ney");
+        //int res = test.RunQuery();
+        //Console.WriteLine($"{res} is fine");
+
+        //Testing Bot
+        //BotManager botManager = new BotManager();
+        //int botIndex = botManager.Spawn();
+        //Console.WriteLine("sending message");
+        //string response = botManager.SendMessage(botIndex, "hello");
+        //Console.WriteLine("total response " + response);
+
+
+        //PropertyTile basetile = new PropertyTile(new Property("test", 300, 30));
+        //Console.WriteLine($"rent is {basetile.CalculateRent()}");
+
+        //PropertyTile test = new MortgageDecorator(basetile);
+        //Console.WriteLine($"rent is {test.CalculateRent()}");
+
+        //test = new HouseDecorator(basetile, 1);
+        //Console.WriteLine($"rent is {test.CalculateRent()}");
+
 
     }
 }

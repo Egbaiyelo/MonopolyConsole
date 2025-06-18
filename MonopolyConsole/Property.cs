@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole
 {
+    //-rename to deed maybe
     public enum PropertyGroup { Brown, LightBlue, Purple, Orange, Red, Yellow, Green, DarkBlue };
     internal class Property
     {
@@ -29,11 +30,13 @@ namespace MonopolyConsole
             return Rent;
         }
 
-        public virtual int CalculateCost(Game game)
+        //- forgot why I called game ...(Game game)
+        public virtual int CalculateCost()
         {
             //-
             //return game.Board[Name].CalculateRent();
-            return -1;
+            return Cost;
         }
     }
+
 }
