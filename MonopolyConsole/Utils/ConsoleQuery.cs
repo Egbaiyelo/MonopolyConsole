@@ -40,8 +40,8 @@ namespace MonopolyConsole.Utils
         public ConsoleQuery(
             string prompt, 
             List<string> options, 
-            string success, 
-            string error, 
+            string success = "", 
+            string error = "", 
             bool multiline = false)
         {
             _prompt = prompt;

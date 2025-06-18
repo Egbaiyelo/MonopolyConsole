@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 
-public class Solution
+public static class Solution
 {
     public static void Main()
     {
@@ -22,7 +22,8 @@ public class Solution
         //ConsoleDisplay hello = new ConsoleDisplay(["hefwefwfe", "uhwevwefwefw", "weuvwevwe"], true);
         //hello.RunDisplay();
 
-        Game game = new Game(2);
+        //Game game = new Game(2);
+        TestProperties();
 
         //string javaBotJarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "jbot.jar");
         //Console.WriteLine(javaBotJarPath);
@@ -40,15 +41,32 @@ public class Solution
         //string response = botManager.SendMessage(botIndex, "hello");
         //Console.WriteLine("total response " + response);
 
+    }
 
-        //PropertyTile basetile = new PropertyTile(new Property("test", 300, 30));
-        //Console.WriteLine($"rent is {basetile.CalculateRent()}");
+    public static void TestProperties()
+    {
+        PropertyTile basetile = new PropertyTile(new Property("test", 300, 30));
+        Console.WriteLine($"rent is {basetile.getRent()}");
 
-        //PropertyTile test = new MortgageDecorator(basetile);
-        //Console.WriteLine($"rent is {test.CalculateRent()}");
+        basetile.Property.Houses = 1;
+        Console.WriteLine($"rent is {basetile.getRent()}");
 
-        //test = new HouseDecorator(basetile, 1);
-        //Console.WriteLine($"rent is {test.CalculateRent()}");
+        basetile.Property.Mortgaged = true;
+        Console.WriteLine($"rent is {basetile.getRent()}");
+
+        int res = 3 / 2;
+        Console.WriteLine(res );
+        // 
+        Player ere = new Player(new Game(1), "ere", 1000);
+        StationTile stat = new StationTile(new Property("reed station", 200, 25));
+        StationTile other = new StationTile(new Property("other station", 200, 25));
+        stat.Property.Owner = other.Property.Owner = ere;
+        //stat.Owner = other.Owner = ere;
+        ere.StationsOwned = 2;
+        Console.WriteLine($"rent is {stat.getRent()}");
+
+        ere.Balance -= 3000;
+
 
 
     }

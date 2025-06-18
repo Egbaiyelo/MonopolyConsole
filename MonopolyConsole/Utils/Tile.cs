@@ -28,39 +28,30 @@ namespace MonopolyConsole.Utils
     internal class PropertyTile : Tile
     {
         public override string Name { get; internal set; }
-        public int Cost;
-        public int Rent;
         public Property Property;
-        public Player? Owner;
-
-        private int Houses;
-        private bool Hotel;
-        protected bool Mortgaged;
+        //public Player? Owner;
+        //- many need get internal set
+        //public int Houses;
+        //private bool Hotel;
+        //public bool Mortgaged;
         //- maybe add a rate that determines how much house and hotel can cost like 0.25-0.5 of cost
 
         /// <summary>
-        /// Tile that holds property
+        /// Board tile that holds property
         /// </summary>
-        /// <param name="property"></param>
+        /// <param name="property">The property</param>
         public PropertyTile(Property property)
         {
             Property = property;
             Name = property.Name + " Tile"; //- Do I need to add 'tile'
-            Cost = property.Cost;
-            Rent = property.Rent;
             TileType = TileType.Property;
-
-            if (Property.Owner != null)
-            {
-                Owner = Property.Owner;
-            }
         }
 
         public override void LandOn(Player p, Game g)
         {
             Console.WriteLine($"{p.Name} lands on {Property.Name}");
-            int cost = CalculateCost();
-            if (Owner is null && p.Balance >= cost)
+            int cost = getCost();
+            if (Property.Owner is null && p.Balance >= cost)
             {
                 //- Maybe get data from property and tile is just wrapper class
                 Console.WriteLine("Do you wish to buy {0} for {1} (Y/N)", Property.Name, cost);
@@ -70,41 +61,23 @@ namespace MonopolyConsole.Utils
                     p.Balance -= cost;
                     p.Properties.Add(Property);
                     Property.Owner = p;
-                    Owner = p;
+                    Property.Owner = p;
                     Console.WriteLine($"{p.Name} has purchased {Property.Name}");
                 }
             }
-            else if (Owner is not null && Owner != p)
+
+            else if (Property.Owner is not null && Property.Owner != p)
             {
                 int rent = Property.CalculateRent();
                 p.Balance -= rent;
-                Owner.Balance += rent;
-                Console.WriteLine($"{p.Name} pays ${rent} rent to {Owner.Name}.");
+                Property.Owner.Balance += rent;
+                Console.WriteLine($"{p.Name} pays ${rent} rent to {Property.Owner.Name}.");
             }
             // else just do nothing
         }
 
-        public virtual int CalculateRent()
-        {
-            int rent = Property.CalculateRent();
-            if (Hotel) return (int)(1.20 * rent);
-            return rent + (int)(0.20 * rent * Houses);
-        }
-
-        public virtual int CalculateCost()
-        {
-            return Property.CalculateCost();
-        }
-
-        public void Upgrade()
-        {
-            if (Property.Owner == null) return;
-            if (Hotel) return;
-
-            if (Houses < 4) { Houses++; Property.Owner.Balance -= 50; }
-            if (Houses == 4) { Houses = 0; Hotel = true;  Property.Owner.Balance -= 100; }
-            Console.WriteLine($"{Property.Name} has been upgraded");
-        }
+        public virtual int getRent() => Property.CalculateRent();
+        public virtual int getCost() => Property.CalculateCost();
     }
 
     internal class ActionTile : Tile
@@ -113,8 +86,6 @@ namespace MonopolyConsole.Utils
         public CardType CardType;
 
         private CardFactory CardFactory;
-
-        //public ActionCard ActionCard; //- Need to link to factory instead
 
         public ActionTile(CardType cardType)
         {
@@ -156,7 +127,9 @@ namespace MonopolyConsole.Utils
     }
 
 
-
+    /// <summary>
+    /// Charges player a certain amount
+    /// </summary>
     internal class TaxTile : Tile
     {
         public override string Name { get; internal set; }
@@ -188,6 +161,7 @@ namespace MonopolyConsole.Utils
 
     internal class StationTile : PropertyTile
     {
+        //- turn stations to property deed too
         private static List<StationTile> _instances = new List<StationTile>();
 
         /// <summary>
@@ -200,8 +174,9 @@ namespace MonopolyConsole.Utils
             _instances.Add(this);
         }
 
-        public override int CalculateRent()
+        public override int getRent()
         {
+            //- stations owned get set manage
             switch (Property.Owner.StationsOwned)
             {
                 case 1:

@@ -52,7 +52,7 @@ namespace MonopolyConsole
             Console.WriteLine("What is the name of Player {0}", index + 1);
             string name = Console.ReadLine();
 
-            return new Player(name, StartingBalance); //- handle ref starting balance (uninit)
+            return new Player(this, name, StartingBalance); //- handle ref starting balance (uninit)
         }
 
         public void RemovePlayer(Player player, string reason)

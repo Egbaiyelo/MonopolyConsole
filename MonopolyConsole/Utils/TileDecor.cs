@@ -20,7 +20,7 @@ namespace MonopolyConsole.Utils
             _tile = tile;
         }
 
-        public override int CalculateRent() => _tile.CalculateRent();
+        public override int getRent() => _tile.getRent();
         public override void LandOn(Player player, Game game) => _tile.LandOn(player, game);
     }
 
@@ -28,7 +28,7 @@ namespace MonopolyConsole.Utils
     {
         public MortgageDecorator(PropertyTile tile) : base(tile) { }
 
-        public override int CalculateRent() => 0; 
+        public override int getRent() => 0; 
 
         public override void LandOn(Player player, Game game)
         {
@@ -46,13 +46,13 @@ namespace MonopolyConsole.Utils
             _houseCount = houseCount;
         }
 
-        public override int CalculateRent() => _tile.CalculateRent() + (_houseCount * 50);
+        public override int getRent() => _tile.getRent() + (_houseCount * 50);
     }
 
     internal class HotelDecorator : PropertyDecorator
     {
         public HotelDecorator(PropertyTile tile) : base(tile) { }
 
-        public override int CalculateRent() => _tile.CalculateRent() + 100;
+        public override int getRent() => _tile.getRent() + 100;
     }
 }
