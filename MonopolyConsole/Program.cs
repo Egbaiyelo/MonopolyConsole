@@ -22,8 +22,11 @@ public static class Solution
         //ConsoleDisplay hello = new ConsoleDisplay(["hefwefwfe", "uhwevwefwefw", "weuvwevwe"], true);
         //hello.RunDisplay();
 
-        //Game game = new Game(2);
-        TestProperties();
+        Game game = new Game();
+        game.SetGame();
+        game.Start();
+        //TestProperties();
+
 
         //string javaBotJarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "jbot.jar");
         //Console.WriteLine(javaBotJarPath);
@@ -57,7 +60,7 @@ public static class Solution
         int res = 3 / 2;
         Console.WriteLine(res );
         // 
-        Player ere = new Player(new Game(1), "ere", 1000);
+        Player ere = new Player(new Game(), "ere", 1000);
         StationTile stat = new StationTile(new Property("reed station", 200, 25));
         StationTile other = new StationTile(new Property("other station", 200, 25));
         stat.Property.Owner = other.Property.Owner = ere;
@@ -70,4 +73,6 @@ public static class Solution
 
 
     }
+
+
 }

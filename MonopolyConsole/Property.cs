@@ -37,6 +37,7 @@ namespace MonopolyConsole
             if (Mortgaged) { return 0; }
 
             int rent = Rent;
+            if (OwnsFullColorGroup(PropertyGroup, Owner.Game.GetAllGameProperties())) rent *= 2;
             if (Hotel) return (int)(1.20 * rent);
             return rent + (int)(0.20 * rent * Houses);
         }
@@ -49,15 +50,21 @@ namespace MonopolyConsole
         {
             // hotel for now is resold at 75
             int hotel = (Hotel) ? 75 + (4 * 50): 0;
-            return Cost + (50 * Houses) ;
+            int cost = (Owner == null) ? Cost : Cost / 2;
+            return cost + (50 * Houses) + hotel;
         }
 
         public void UnMortgage()
         {
+            if (!Mortgaged) { return; }
             if (Owner.Balance > Cost / 2)
             {
                 Owner.Balance -= Cost / 2;
-
+                Mortgaged = false;
+            }
+            else
+            {
+                Console.WriteLine("Insufficient funds, need {0} but has {1}", Cost / 2, Owner.Balance);
             }
         }
 
@@ -100,6 +107,13 @@ namespace MonopolyConsole
             }
             Owner.Balance += reimburse;
         }
+
+        public bool OwnsFullColorGroup(PropertyGroup group, IEnumerable<Property> allProperties)
+        {
+            var groupProperties = allProperties.Where(p => p.PropertyGroup == group);
+            return groupProperties.All(p => Owner.Properties.Contains(p) && p.Owner == Owner);
+        }
+
     }
 
 }

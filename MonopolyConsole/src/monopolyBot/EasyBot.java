@@ -1,17 +1,15 @@
-import java.util.HashMap;
 
 /**
 * Keeps track of balance and doesnt want it to go below certain threshold
 * Keeps track of networth (assets) to see if debt is preventable
 */
 
-public class MonopolyBot {
+public class EasyBot {
     private int balance;
-    private int networth;  //- need to factor this in
+    private int networth;  
     private int threshold;
-    private HashMap<String, Integer> propertyValues; //- Might not use in simple bot maybe
 
-    public MonopolyBot(int startingBalance) {
+    public EasyBot(int startingBalance) {
         this.balance = startingBalance;
         this.threshold = 200;
         this.propertyValues = new HashMap<>();

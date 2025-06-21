@@ -57,12 +57,12 @@ namespace MonopolyConsole.Utils
             while (true)
             {
                 Console.WriteLine(_prompt + ": ");
-                foreach (var option in _options)
+                for (int i = 0; i < _options.Count; i++)
                 {
                     //- or make delegate if it matters
                     if (_multiLine)
-                        Console.WriteLine($"- {option}");
-                    else Console.Write($"{option}, ");
+                        Console.WriteLine($"-{i}: {_options[i]}");
+                    else Console.Write($"{i}: {_options[i]}, ");
                 }
                 if (!_multiLine) Console.WriteLine("\b\b  ");
 
@@ -70,7 +70,7 @@ namespace MonopolyConsole.Utils
                 {
                     int response = int.Parse(Console.ReadLine());
                     Console.WriteLine($"you chose {response}");
-                    if (response < 1 || response > _options.Count)
+                    if (response < 0 || response >= _options.Count)
                     {
                         ClearQuery();
                         Console.WriteLine($"You chose {response}. Please pick between 1 and {_options.Count}");

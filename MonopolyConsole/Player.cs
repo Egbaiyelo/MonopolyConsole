@@ -8,9 +8,31 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole
 {
-    internal class Player
+    internal abstract class Playeroo
     {
-        private Game Game;
+        protected Game Game;
+        public string Name;
+        public int Balance { get; set; }
+        public List<Property> Properties = new();
+        public int Position = 0;
+
+        internal int StationsOwned;
+        internal int UtilitiesOwned;
+
+        public bool InJail = false;
+
+        public abstract void Play();
+        public virtual void Move(int steps)
+        {
+        }
+
+        public override string ToString() => Name;
+    }
+
+
+    internal class Player : Playeroo
+    {
+        internal Game Game;
 
         public string Name;
         private int balance;
@@ -28,7 +50,7 @@ namespace MonopolyConsole
                 return Balance + propertyValue;
             }
         }
-        int Position = 0;
+        private int Position = 0;
         public List<Property> Properties = new List<Property>();
 
         internal int StationsOwned;
@@ -38,6 +60,7 @@ namespace MonopolyConsole
         
         public Player(Game game, string name, int startingBalance)
         {
+            Game = game;
             Name = name;
             Balance = startingBalance;
         }
@@ -68,12 +91,90 @@ namespace MonopolyConsole
         // Roll
         // Trade, Mortgage, unmortgage, quit, sendmoney
         // Play ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        public void Play()
+        /// <summary>
+        /// Presents a menu of actions for the player during their turn.
+        /// Actions: Trade [placeholder], liquidate, Unmortgage, 
+        /// Send Money [placeholder], Quit, and End Turn.
+        /// </summary>
+        public override void Play()
         {
-            int input = -1;
-            while (input != 0)
+            // Loop until the player chooses to end their turn or quit the game.
+            while (true)
             {
+                Console.WriteLine($"Balance: {Balance}, Net Worth: {NetWorth}");
+                Console.WriteLine("Choose an action:");
 
+                List<string> actions = new List<string>()
+                {
+                    //- trim options
+                    "Trade",            
+                    "Liquidate Assets",         
+                    "Unmortgage",       
+                    "Send Money",       
+                    "Quit (Forfeit)",   
+                    "End Turn"
+                    //"Info"
+                };
+
+                ConsoleQuery query = new ConsoleQuery("Enter the number of the action you want", actions);
+                int input = query.RunQuery();
+
+                switch (input)
+                {
+                    case 0:
+                        //Trade();
+                        break;
+                    case 1:
+                        Liquidate();
+                        break;
+                    case 2:
+                        //Unmortgage();
+                        break;
+                    case 3:
+                        //SendMoney();
+                        break;
+                    case 4:
+                        Quit(Game);
+                        return; 
+                    case 5:
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        private void Unmortgage()
+        {
+            var mortgagedAssets = Properties.Where(p => p.Mortgaged).ToList();
+
+            if (mortgagedAssets.Count == 0)
+            {
+                Console.WriteLine("You have no mortgaged properties.");
+                return;
+            }
+
+            List<string> options = new List<string>();
+            foreach (var asset in mortgagedAssets)
+            {
+                options.Add($"{asset.Name} [Mortgage Value: {asset.CalculateCost() / 2}]");
+            }
+
+            ConsoleQuery unmortgageQuery = new ConsoleQuery("Select a property to unmortgage", options, multiline: true);
+            int choice = unmortgageQuery.RunQuery();
+
+            Property selectedAsset = mortgagedAssets[choice - 1];
+            int unmortgageCost = selectedAsset.CalculateCost() / 2 ; 
+
+            if (Balance >= unmortgageCost)
+            {
+                selectedAsset.UnMortgage();
+                Console.WriteLine($"{selectedAsset.Name} is now unmortgaged.");
+            }
+            else
+            {
+                Console.WriteLine("Insufficient balance to unmortgage the property.");
             }
         }
 
@@ -92,7 +193,7 @@ namespace MonopolyConsole
 
         private void setBalance(int value)
         {
-            balance += value;
+            balance = value;
             while (balance < 0)
             {
                 //- player might not have property to pay back
