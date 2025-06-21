@@ -15,7 +15,7 @@ namespace MonopolyConsole
     /// </summary>
     internal class Game
     {
-        public List<Player> Players;
+        public List<Participant> Players;
         public Property[] Properties;
         public Board Board;
         public int StartingBalance = 2500;
@@ -30,7 +30,7 @@ namespace MonopolyConsole
         public Game()
         {
             int numProperties = 10;
-            Players = new List<Player>();
+            Players = new List<Participant>();
             Properties = new Property[numProperties];
             Board = new Board();
 
@@ -106,7 +106,7 @@ namespace MonopolyConsole
                     Console.WriteLine($"{Players[j].Name}'s turn to play"); //- remove s if end in s
                     int diceRoll = RollDice(2);
                     Console.WriteLine($"{Players[j].Name} rolled a {diceRoll}");
-                    Players[j].Move(diceRoll, this);
+                    Players[j].Move(diceRoll);
                     Players[j].Play();
                     Console.ReadLine();
                 }

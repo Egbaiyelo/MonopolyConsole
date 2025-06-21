@@ -35,13 +35,13 @@ namespace MonopolyConsole.Utils
                 //- Probably make fines more dynamic
                 //- More intense chances like pay everyone and tax every house need larger methods
                 //- weighted chances would be fun
-                0 => ChanceCard("Advance to GO", true, (p, g) => p.MoveTo(0, g)),
+                0 => ChanceCard("Advance to GO", true, (p, g) => p.MoveTo(0)),
                 1 => ChanceCard("Speeding fine. Pay $15", true, (p, g) => p.Balance -= 15),
                 2 => ChanceCard("Get out of Jail Free", false, (p, g) => p.InJail = false),
-                3 => ChanceCard("Go to jail", true, (p, g) => p.MoveTo(g.GetPosition("jail"), g)),
+                3 => ChanceCard("Go to jail", true, (p, g) => p.MoveTo(g.GetPosition("jail"))),
                 4 => ChanceCard("Bank error in your favour, collect 50", true, (p, g) => p.Balance += 50),
-                5 => ChanceCard("Go three steps back", true, (p, g) => p.Move(-3, g)),
-                6 => ChanceCard("Go to the nearest station", true, (p, g) => p.MoveTo(g.GetPosition("Nearest Station"), g)),
+                5 => ChanceCard("Go three steps back", true, (p, g) => p.Move(-3)),
+                6 => ChanceCard("Go to the nearest station", true, (p, g) => p.MoveTo(g.GetPosition("Nearest Station"))),
                 _ => throw new Exception("Unexpected roll")
             };
         }
@@ -62,13 +62,13 @@ namespace MonopolyConsole.Utils
             {
                 //- Probably make fines more dynamic
                 //- More intense chests like everyone pay 20
-                0 => CommunityChestCard("Advance to GO", true, (p, g) => p.MoveTo(0, g)),
+                0 => CommunityChestCard("Advance to GO", true, (p, g) => p.MoveTo(0)),
                 1 => CommunityChestCard("It's your lucky day, you found $50", true, (p, g) => p.Balance += 50),
                 2 => CommunityChestCard("Get out of Jail Free", false, (p, g) => p.InJail = false),
-                3 => CommunityChestCard("Go to jail", true, (p, g) => p.MoveTo(g.GetPosition("jail"), g)),
+                3 => CommunityChestCard("Go to jail", true, (p, g) => p.MoveTo(g.GetPosition("jail"))),
                 4 => CommunityChestCard("Bank error in your favour, collect $100", true, (p, g) => p.Balance += 100),
-                5 => CommunityChestCard("Go three steps back", true, (p, g) => p.Move(-3, g)),
-                6 => CommunityChestCard("Go to the nearest station", true, (p, g) => p.Move(-10, g)),
+                5 => CommunityChestCard("Go three steps back", true, (p, g) => p.Move(-3)),
+                6 => CommunityChestCard("Go to the nearest station", true, (p, g) => p.Move(-10)),
                 _ => throw new Exception("Unexpected roll")
             };
         }

@@ -27,7 +27,7 @@ namespace MonopolyConsole
         {
             //- Need checks, probably just communicate directly
             // For now using int and string to communicate
-            PlayerBot bot = new PlayerBot(JavaBotJarPath);
+            PlayerBot bot = new EasyPlayerBot(JavaBotJarPath);
             Bots.Add(bot);
             return Bots.Count - 1;
         }
@@ -44,7 +44,7 @@ namespace MonopolyConsole
         }
     }
 
-    public class PlayerBot
+    internal abstract class PlayerBot : Participant
     {
         private Process Process;
         private StreamWriter inputWriter;
@@ -115,6 +115,19 @@ namespace MonopolyConsole
         {
             Process.Kill();
             Process.Dispose();
+        }
+
+        public override void Play()
+        {
+
+        }
+    }
+
+    internal class EasyPlayerBot : PlayerBot
+    {
+        public EasyPlayerBot(string source) : base(source)
+        {
+
         }
     }
 }

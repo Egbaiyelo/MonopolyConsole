@@ -64,7 +64,7 @@ namespace MonopolyConsole
             Tiles[28] = new PropertyTile(new Property("Water Works", 150, 15)); // Utility
             Tiles[29] = new PropertyTile(new Property("Marvin Gardens", 280, 28));
 
-            Tiles[30] = new EdgeTile("Go to Jail", (Player p, Game g) => p.MoveTo(g.GetPosition("jail"), g) );
+            Tiles[30] = new EdgeTile("Go to Jail", (Player p, Game g) => p.MoveTo(g.GetPosition("jail")) );
 
             //Green
             Tiles[31] = new PropertyTile(new Property("Pacific Avenue", 300, 30));

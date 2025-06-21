@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole
 {
-    internal abstract class Playeroo
+    internal abstract class Participant
     {
-        protected Game Game;
+        public Game Game;
         public string Name;
+
+        protected int balance;
         public int Balance { get; set; }
         public List<Property> Properties = new();
         public int Position = 0;
@@ -25,17 +27,21 @@ namespace MonopolyConsole
         public virtual void Move(int steps)
         {
         }
+        public virtual void MoveTo(int pos)
+        {
+
+        }
 
         public override string ToString() => Name;
     }
 
 
-    internal class Player : Playeroo
+    internal class Player : Participant
     {
-        internal Game Game;
+        //internal Game Game;
 
-        public string Name;
-        private int balance;
+        //public string Name;
+        //private int balance;
         public int Balance 
         {
             get { return balance; }
@@ -70,22 +76,22 @@ namespace MonopolyConsole
             return Name;
         }
 
-        public void Move(int tiles, Game game)
+        public override void Move(int tiles)
         {
             // Cash from Go
             int toTile = Position + tiles;
-            if (toTile >= game.Board.Tiles.Length) { Balance += 200; }
+            if (toTile >= Game.Board.Tiles.Length) { Balance += 200; }
 
-            Position = (toTile) % game.Board.Tiles.Length;
+            Position = (toTile) % Game.Board.Tiles.Length;
             if (Position < 0)
-                Position += game.Board.Tiles.Length; // backwards wrap
-            game.Board.Tiles[Position].LandOn(this, game);
+                Position += Game.Board.Tiles.Length; // backwards wrap
+            Game.Board.Tiles[Position].LandOn(this, Game);
         }
 
-        public void MoveTo(int posMove, Game game)
+        public override void MoveTo(int posMove)
         {
-            Position = posMove % game.Board.Tiles.Length;
-            game.Board.Tiles[Position].LandOn(this, game);
+            Position = posMove % Game.Board.Tiles.Length;
+            Game.Board.Tiles[Position].LandOn(this, Game);
         }
 
         // Roll
