@@ -24,14 +24,8 @@ namespace MonopolyConsole
         public bool InJail = false;
 
         public abstract void Play();
-        public virtual void Move(int steps)
-        {
-        }
-        public virtual void MoveTo(int pos)
-        {
-
-        }
-
+        public abstract void Move(int steps);
+        public abstract void MoveTo(int pos);
         public override string ToString() => Name;
     }
 
@@ -256,6 +250,12 @@ namespace MonopolyConsole
             }
         }
 
+        /// <summary>
+        /// Returns a string list of assests owned by the player
+        /// </summary>
+        /// <param name="cost">Whether or not to include costs</param>
+        /// <param name="developments">Whether or not to include developments</param>
+        /// <returns></returns>
         private List<string> ListAssets(bool cost = true, bool developments = true)
         {
             List<string> assets = new List<string>();

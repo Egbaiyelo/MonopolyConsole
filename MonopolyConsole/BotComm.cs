@@ -23,11 +23,42 @@ namespace MonopolyConsole
             }
         }
 
-        public int Spawn()
+        public int Spawn(int startingBalance)
         {
+            Process proc = new Process();
+            StreamWriter inputWriter;
+            StreamReader outputReader;
+            StreamReader errorReader;
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = @"C:\Program Files\Java\jdk-24\bin\java.exe",
+                Arguments = $"-jar {JavaBotJarPath}",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            proc.StartInfo = startInfo;
+
+            try
+            {
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: Could not start Java bot.");
+                Console.WriteLine(ex.Message);
+                return -1;
+                //- ??
+            }
+
             //- Need checks, probably just communicate directly
             // For now using int and string to communicate
-            PlayerBot bot = new EasyPlayerBot(JavaBotJarPath);
+            string initInfo = $"{{\"startingBalance\": {startingBalance}}}";
+            PlayerBot bot = new PlayerBot(proc, initInfo);
             Bots.Add(bot);
             return Bots.Count - 1;
         }
@@ -44,46 +75,25 @@ namespace MonopolyConsole
         }
     }
 
-    internal abstract class PlayerBot : Participant
+    //- might merge some into bot manager
+    internal class PlayerBot : Participant
     {
         private Process Process;
         private StreamWriter inputWriter;
         private StreamReader outputReader;
         private StreamReader errorReader;
+
         //- Just in case so I can remove them all later
         private static PlayerBot[] instances;
 
-        public PlayerBot(string botPath)
+        public PlayerBot(Process proc, string initInfo)
         {
-            Process = new Process();
+            Process = proc;
+            inputWriter = proc.StandardInput;
+            outputReader = proc.StandardOutput;
+            errorReader = proc.StandardError;
 
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = @"C:\Program Files\Java\jdk-24\bin\java.exe",
-                Arguments = $"-jar {botPath}",
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-
-            };
-
-            Process.StartInfo = startInfo;
-
-            try
-            {
-                Process.Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR: Could not start Java bot.");
-                Console.WriteLine(ex.Message);
-                return;
-            }
-            inputWriter = Process.StandardInput;
-            outputReader = Process.StandardOutput;
-            errorReader = Process.StandardError;
+            SendMessage(initInfo);
         }
 
         public string SendMessage(string command)
@@ -91,7 +101,8 @@ namespace MonopolyConsole
             inputWriter.WriteLine(command);
             inputWriter.Flush();
 
-            //- probably need cancelation token so it doesnt go on forever, given bot is quicker, maybe 3 seconds or so.
+            //- probably need cancelation token so it doesnt go on forever, given bot is quicker, maybe 3 seconds or so
+            // or async reader with timeout.
             string line;
             string total = "";
             while ((line = outputReader.ReadLine()) != null)
@@ -111,25 +122,45 @@ namespace MonopolyConsole
             return total; 
         }
 
-        public void Dispose()
-        {
-            Process.Kill();
-            Process.Dispose();
-        }
 
         public override void Play()
         {
 
         }
-    }
-
-    internal class EasyPlayerBot : PlayerBot
-    {
-        public EasyPlayerBot(string source) : base(source)
+        public override void Move(int steps)
         {
 
         }
+        public override void MoveTo(int pos)
+        {
+
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                if (!Process.HasExited)
+                {
+                    Process.Kill();
+                }
+                Process.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR disposing bot process: " + ex.Message);
+            }
+
+        }
+
     }
+
+    //- Probably general bot but decoupled from processbot, would decouple and put in player class
+    //- not might have to move all seperate
+    //internal class EasyPlayerBot : PlayerBot
+    //{
+
+    //}
 }
 
 

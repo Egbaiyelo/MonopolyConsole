@@ -4,5 +4,5 @@
 /**
  * 
  */
-module MonopolyJavaBot {
+module MonopolyBots {
 }
