@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
 
 namespace MonopolyConsole
@@ -9,7 +10,9 @@ namespace MonopolyConsole
     {
         // Bot level 1
         //- bad absolute path
-        private string JavaBotJarPath = @"C:\Users\HP\source\repos\MonopolyConsole\MonopolyConsole\jbot.jar";
+
+
+        private string JavaBotJarPath = @"C:\Users\HP\source\repos\MonopolyConsole\MonopolyBots\jbot.jar";
         private List<PlayerBot> Bots;
 
         public BotManager()
@@ -23,7 +26,7 @@ namespace MonopolyConsole
             }
         }
 
-        public int Spawn(int startingBalance)
+        public int Spawn(int startingBalance, string level = "EasyBot")
         {
             Process proc = new Process();
             StreamWriter inputWriter;
@@ -33,7 +36,7 @@ namespace MonopolyConsole
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = @"C:\Program Files\Java\jdk-24\bin\java.exe",
-                Arguments = $"-jar {JavaBotJarPath}",
+                Arguments = $"-jar {JavaBotJarPath} {level}",
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
