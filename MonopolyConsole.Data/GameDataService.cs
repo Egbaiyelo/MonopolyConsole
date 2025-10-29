@@ -115,9 +115,9 @@ namespace MonopolyConsole.Data
             };
         }
 
-        public static Card GenerateCommunityChestCard()
-        {
+        //public static Card GenerateCommunityChestCard()
+        //{
 
-        }
+        //}
     }
 }
