@@ -94,8 +94,5 @@ namespace MonopolyConsole.Core.Board
             Group = group;
             Deed = deed;
         }
-
-
-
     }
 }

@@ -17,6 +17,18 @@ namespace MonopolyConsole.Core.Board
 
         public Player? Owner;
 
-        public Tile.TileType Group;
+        public Tile.TileGroup Group;
+
+
+        public Property(string name, int price, int baseRent, Tile.TileGroup group)
+        {
+            Name = name;
+            Price = price;
+            BaseRent = baseRent;
+            Group = group;
+
+            Houses = 0;
+            Owner = null;
+        }
     }
 }
