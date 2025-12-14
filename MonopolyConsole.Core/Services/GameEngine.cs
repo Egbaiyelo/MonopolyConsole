@@ -1,49 +1,65 @@
-﻿using MonopolyConsole.Core.Interfaces;
+﻿using MonopolyConsole.Core.Board;
+using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
 
 namespace MonopolyConsole.Core.Services
 {
     public class GameEngine : IGameEngine
     {
-        public void StartGame()
+        public GameEngine() { }
+
+        public void SetupGame()
         {
-            throw new NotImplementedException();
+            //Tiles, cards
         }
 
-        public void EndTurn()
+        public Tile getTile()
         {
-            throw new NotImplementedException();
+
+        }
+
+        public void HandlePayment(Player payer, Player? recipient, int amount)
+        {
+            if (payer.Balance >= amount)
+            {
+                payer.Balance -= amount;
+                recipient?.Balance += amount;
+                return;
+            }
+
+            // Player cannot afford it
+            _prompter.Notify(payer, $"You need ${amount}, but you only have ${payer.Balance}.");
+
+            while (payer.Balance < amount)
+            {
+                _prompter.PromptSellOrMortgage(payer, amount - payer.Balance);
+
+                if (payer.Balance >= amount)
+                    break;
+
+                if (_prompter.Confirm(payer, "Declare bankruptcy?"))
+                {
+                    HandleBankruptcy(payer, recipient);
+                    return;
+                }
+            }
+
+            // Now they can pay
+            payer.Balance -= amount;
+            recipient?.Balance += amount;
         }
 
 
-        void IGameEngine.BuyProperty(Player player, Property property)
+        public void CollectFromAllPlayers(Player receiver, int amount)
         {
-            throw new NotImplementedException();
+            foreach (var other in _players.Where(p => p != receiver))
+            {
+                HandlePayment(other, receiver, amount);
+            }
         }
 
-        bool IGameEngine.CanAffordProperty(Player player, Property property)
-        {
-            throw new NotImplementedException();
-        }
 
-        Player IGameEngine.GetCurrentPlayer()
-        {
-            throw new NotImplementedException();
-        }
 
-        Player IGameEngine.GetPlayer()
-        {
-            throw new NotImplementedException();
-        }
 
-        void IGameEngine.ProcessLanding(Player player, Tile tile)
-        {
-            //If tile is tax tax player, action, then do that, property then get type
-        }
-
-        void IGameEngine.ProcessTurn(Player player)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
