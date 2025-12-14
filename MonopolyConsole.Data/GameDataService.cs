@@ -16,15 +16,6 @@ namespace MonopolyConsole.Data
     // handles saving/loading game state from files.
     // setup data
 
-    public interface IGameDataService
-    {
-        List<Tile> LoadTiles();
-
-        List<Card> LoadChanceCards();
-
-        List<Card> LoadCommunityChestCards();
-    }
-
     public  class GameDataService : IGameDataService
     {
         public GameDataService() { }
