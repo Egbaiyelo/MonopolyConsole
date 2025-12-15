@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MonopolyConsole.Core\MonopolyConsole.Core.csproj" />
+    <ProjectReference Include="..\MonopolyConsole.Data\MonopolyConsole.Data.csproj" />
+  </ItemGroup>
+
 </Project>
