@@ -5,13 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using MonopolyConsole.Core.Models;
 
-namespace MonopolyConsole.Core.Board
+namespace MonopolyConsole.Core.BoardComponents
 {
     public class Property
     {
         public string Name { get; set; }
         public int Price { get; set; }
         public int BaseRent { get; set; }
+
+        private int _rent;
+        public int Rent 
+        {
+            get => BaseRent + (int)(Houses * (Price/10));
+            set => _rent = value;
+        }
 
         public int Houses;
 

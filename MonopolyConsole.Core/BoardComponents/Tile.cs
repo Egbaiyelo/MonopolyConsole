@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonopolyConsole.Core.Board
+namespace MonopolyConsole.Core.BoardComponents
 {
     /// <summary>
     /// Monopoly Tiles
@@ -43,8 +43,20 @@ namespace MonopolyConsole.Core.Board
 
         public enum TileType
         {
-            //
-            Tax, Card, Property, Action, Jail
+            // tax tiles
+            Tax, 
+
+            // Community chest, etc
+            Card,
+
+            // Property and special properties (Utilities and stations)
+            Property, 
+
+            // go to jail, go, 
+            Action, 
+
+            // Jail
+            Jail
         }
 
         public int Index;
@@ -52,8 +64,8 @@ namespace MonopolyConsole.Core.Board
 
         // The group the tile belongs to, the type is infered from the group
         public TileGroup Group;
-        Property? Deed;
-        Card? Card;
+        public Property? Deed;
+        public Card? Card;
 
         public TileType Type
         {

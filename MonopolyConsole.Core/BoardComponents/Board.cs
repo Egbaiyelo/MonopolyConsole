@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MonopolyConsole.Core.Board.Tile;
+using static MonopolyConsole.Core.BoardComponents.Tile;
 
-namespace MonopolyConsole.Core.Board
+namespace MonopolyConsole.Core.BoardComponents
 {
     public class Board
     {

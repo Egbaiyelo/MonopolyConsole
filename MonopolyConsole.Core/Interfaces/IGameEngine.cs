@@ -1,4 +1,4 @@
-﻿using MonopolyConsole.Core.Board;
+﻿using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace MonopolyConsole.Core.Interfaces
         Player GetCurrentPlayer();
 
 
-        bool CanAffordProperty(Player player, Property property);
+        bool CanBuyProperty(Player player, Property property);
         void BuyProperty(Player player, Property property);
         void EndTurn();
 
