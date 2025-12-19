@@ -7,10 +7,10 @@ using static MonopolyConsole.Core.Board.Tile;
 
 namespace MonopolyConsole.Core.Board
 {
-    internal class Board
+    public class Board
     {
         private readonly Tile[] tiles;
-        private readonly int BoardSize;
+        public readonly int BoardSize;
         public Dictionary<string, int> Map = new Dictionary<string, int>();
 
         public Board(Tile[] tiles) 

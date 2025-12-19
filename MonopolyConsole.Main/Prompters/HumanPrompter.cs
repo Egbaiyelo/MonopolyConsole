@@ -19,7 +19,21 @@ namespace MonopolyConsole.App.Prompters
 
         public int ChooseOption(Player player, string prompt, List<string> options)
         {
-            return 0;
+            Console.WriteLine(prompt);
+            foreach (string option in options)
+            {
+                Console.WriteLine(option);
+            }
+
+            int choice = 0;
+            do
+            {
+                Console.WriteLine("What do you choose =>");
+                string input = Console.ReadLine();
+                choice = int.Parse(input);
+            } while (choice < 0 || choice > options.Count());
+
+            return choice;
         }
 
 
@@ -28,5 +42,7 @@ namespace MonopolyConsole.App.Prompters
         {
             Console.WriteLine($"{player.Name}: {message}");
         }
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonopolyConsole.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Core.Board
 {
+    /// <summary>
+    /// Monopoly Tiles
+    /// </summary>
     public class Tile
     {
         public enum TileGroup
@@ -45,8 +49,11 @@ namespace MonopolyConsole.Core.Board
 
         public int Index;
         public string Name { get; set; }
+
+        // The group the tile belongs to, the type is infered from the group
         public TileGroup Group;
         Property? Deed;
+        Card? Card;
 
         public TileType Type
         {
@@ -86,6 +93,7 @@ namespace MonopolyConsole.Core.Board
                 };
             }
         }
+
 
         public Tile(int index, string name, TileGroup group, Property? deed)
         {

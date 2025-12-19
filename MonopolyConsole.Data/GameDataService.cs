@@ -21,7 +21,7 @@ namespace MonopolyConsole.Data
         public GameDataService() { }
 
 
-        Tile CreateActionTile(int index, string name, TileGroup group)
+        Tile CreateActionTile(int index, string name, TileGroup group, Card card)
         {
             return new Tile(index, name, group, null); 
         }

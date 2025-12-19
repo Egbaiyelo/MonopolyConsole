@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.App.Prompters
 {
-    internal class BotPrompter
+    internal class BotConsolePrompter
     {
     }
 }

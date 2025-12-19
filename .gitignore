@@ -370,3 +370,5 @@ FodyWeavers.xsd
 
 
 MonopolyBots/
+
+*.temp.*
