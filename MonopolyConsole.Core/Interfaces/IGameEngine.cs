@@ -8,11 +8,18 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Core.Interfaces
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IGameEngine
     {
 
         void SetupGame();
+
+        // Logic for a player's turn (roll dice, process landing)
         void ProcessTurn(Player player);
+
+        // Logic for landing on a tile, paying tax, buy property, pay rent
         void ProcessLanding(Player player, Tile tile);
 
         // Move player and handle landing

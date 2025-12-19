@@ -21,17 +21,31 @@ namespace MonopolyConsole.Core.Services
             _prompter = prompter;
         }
 
-        // 💵 Money
-        public void HandlePayment(Player payer, Player? recipient, int amount) { /* ... */ }
-        public void CollectFromAllPlayers(Player receiver, int amount) { /* ... */ }
-        public void DeclareBankruptcy(Player payer, Player? creditor) { /* ... */ }
+        // Money
+        public void HandlePayment(Player payer, Player? recipient, int amount) 
+        { 
+        }
+        public void CollectFromAllPlayers(Player receiver, int amount) 
+        {
+        }
+        public void DeclareBankruptcy(Player payer, Player? creditor) 
+        { 
+        }
 
-        // 🏠 Properties
-        public void BuyProperty(Player player, Property property) { /* ... */ }
-        public void MortgageProperty(Player player, Property property) { /* ... */ }
-        public void UnmortgageProperty(Player player, Property property) { /* ... */ }
+        // Properties
+        public void BuyProperty(Player player, Property property) 
+        { 
+        }
+        public void MortgageProperty(Player player, Property property) 
+        { 
+        }
+        public void UnmortgageProperty(Player player, Property property) 
+        { 
+        }
 
-        // 🔁 Trading
-        public void InitiateTrade(Player proposer) { /* ... */ }
+        // Trading
+        public void InitiateTrade(Player proposer) 
+        { 
+        }
     }
 }

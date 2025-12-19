@@ -6,6 +6,11 @@ namespace MonopolyConsole.Core.Services
 {
     public class GameEngine : IGameEngine
     {
+
+        DiceRoller DiceRoller;
+
+        
+
         public GameEngine() { }
 
         public void SetupGame()
