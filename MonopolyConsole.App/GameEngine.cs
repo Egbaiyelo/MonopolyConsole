@@ -39,7 +39,15 @@ namespace MonopolyConsole.App
         public void ProcessTurn(Player player)
         {
             int roll = DiceRoller.Roll();
-            ConsolePrompter.Notify(player, $"You rolled a {roll}");
+
+            if (player.InJail)
+            {
+                ConsolePrompter.Notify(player, "You are in Jail");
+                //HandleJail();
+                return;
+            }
+
+            ConsolePrompter.Notify(player, $"You rolled {roll}");
 
             MovePlayer(player, roll);
 
@@ -62,14 +70,52 @@ namespace MonopolyConsole.App
                     }
                     break;
                 case Tile.TileType.Card:
+                    if (tile.Group == Tile.TileGroup.Chance)
+                    {
+
+                    }
+                    else if(tile.Group == Tile.TileGroup.CommunityChest)
+                    {
+
+                    }
                     break;
+
+                // Jail (Just visiting), free parking, Go, 
                 case Tile.TileType.Action:
+                    if (tile.Group == Tile.TileGroup.GoToJail)
+                    {
+                        ConsolePrompter.Notify(player, "Go to Jail!!!");
+                        //+ Get location dynamically later
+                        //+ Jail player somehow
+                        player.InJail = true;
+                        MovePlayerTo(player, 10);
+
+                    }
+                    else if (tile.Group == Tile.TileGroup.FreeParking)
+                    {
+                        ConsolePrompter.Notify(player, "Free parking");
+                    }
+                    else if (tile.Group == Tile.TileGroup.Go)
+                    {
+                        ConsolePrompter.Notify(player, "You landed on Go");
+                    }
                     break;
 
-                // Jail (Just visiting), free parking
-                default: 
+                // Default
+                default:
+                    // ??
+                    if (tile.Group == Tile.TileGroup.Jail)
+                    {
+                        if (player.InJail)
+                        {
+                            ConsolePrompter.Notify(player, "Just visiting Jail");
+                        }
+                        else
+                        {
+                            ConsolePrompter.Notify(player, "You are in Jail");
+                        }
+                    }
                     break;
-
             }
         }
 

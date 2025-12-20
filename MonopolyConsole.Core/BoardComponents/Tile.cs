@@ -46,13 +46,13 @@ namespace MonopolyConsole.Core.BoardComponents
             // tax tiles
             Tax, 
 
-            // Community chest, etc
+            // Community chest & Chance 
             Card,
 
             // Property and special properties (Utilities and stations)
             Property, 
 
-            // go to jail, go, 
+            // go to jail, go, free parking
             Action, 
 
             // Jail
