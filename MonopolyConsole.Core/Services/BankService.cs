@@ -1,4 +1,4 @@
-﻿using MonopolyConsole.Core.Board;
+﻿using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
 using System;

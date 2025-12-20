@@ -1,4 +1,5 @@
-﻿using MonopolyConsole.Core.Interfaces;
+﻿using MonopolyConsole.Core.BoardComponents;
+using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,24 @@ namespace MonopolyConsole.App.Prompters
             Console.WriteLine($"{player.Name}: {message}");
         }
 
+        public void HandleBankruptcy(Player player)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void PromptSellOrMortgage(Player player, int amountNeeded)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DecideToBuy(Property property, Player player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Property? GetPropertyToSellOrMortgage(Player player, decimal requiredCash)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

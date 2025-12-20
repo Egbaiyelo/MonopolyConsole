@@ -7,8 +7,8 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using static MonopolyConsole.Core.Models.Card;
-using static MonopolyConsole.Core.Board.Tile;
-using MonopolyConsole.Core.Board;
+using static MonopolyConsole.Core.BoardComponents.Tile;
+using MonopolyConsole.Core.BoardComponents;
 
 namespace MonopolyConsole.Data
 {
@@ -21,7 +21,7 @@ namespace MonopolyConsole.Data
         public GameDataService() { }
 
 
-        Tile CreateActionTile(int index, string name, TileGroup group, Card card)
+        Tile CreateActionTile(int index, string name, TileGroup group)
         {
             return new Tile(index, name, group, null); 
         }

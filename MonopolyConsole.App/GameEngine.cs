@@ -160,6 +160,14 @@ namespace MonopolyConsole.App
             ProcessLanding(player, Board[player.Position]);
         }
 
+        public void CollectFromAllPlayers(Player receiver, int amount)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void PayPropertyRepairCosts(Player receiver, int houseCost, int hotelCost)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
