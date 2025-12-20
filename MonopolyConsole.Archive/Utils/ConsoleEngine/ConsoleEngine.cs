@@ -16,14 +16,14 @@ namespace MonopolyConsole.Utils.ConsoleEngine
         "|    |"
         "|    |"
         "|    |"
-        "";
+        "      ";
 
     class ConsoleEngine
     {
         
     }
 
-    internal class ConsoleCard {
+    public class ConsoleCard {
 
         // Relative position
         public int X, Y;
@@ -123,4 +123,5 @@ namespace MonopolyConsole.Utils.ConsoleEngine
         }
 
     }
+
 }

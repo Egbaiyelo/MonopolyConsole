@@ -2,6 +2,7 @@
 using MonopolyConsole;
 using MonopolyConsole.Utils;
 using System;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 
@@ -22,9 +23,9 @@ public static class Solution
         //ConsoleDisplay hello = new ConsoleDisplay(["hefwefwfe", "uhwevwefwefw", "weuvwevwe"], true);
         //hello.RunDisplay();
 
-        Game game = new Game();
-        game.SetGame();
-        game.Start();
+        //Game game = new Game();
+        //game.SetGame();
+        //game.Start();
         //TestProperties();
 
 
@@ -43,6 +44,9 @@ public static class Solution
         //Console.WriteLine("sending message");
         //string response = botManager.SendMessage(botIndex, "hello");
         //Console.WriteLine("total response " + response);
+
+        //TestBot();
+        TestConsoleEngine();
 
     }
 
@@ -74,5 +78,37 @@ public static class Solution
 
     }
 
+    public static void TestBot()
+    {
+        BotManager botManager = new BotManager();
+        int alk = botManager.Spawn(1000);
 
+        botManager.SendMessage(alk, "hfuew");
+    }
+
+    public static void TestConsoleEngine()
+    {
+        Console.SetWindowSize(60, 62);
+        //Console.SetBufferSize(60, 60);
+        
+
+        ConsoleCard test = new ConsoleCard("lets try this", 11*5, 11*5, true);
+        test.Print();
+
+        Console.SetCursorPosition(3, 59);
+        Console.WriteLine("wjofwe");
+
+        string topTile = "---------\n" +
+                         "|       |\n" +
+                         "|       |\n" +
+                         "|       |\n" +
+                         "+++++++++\n";
+
+        ConsoleCard test1 = new ConsoleCard(topTile);
+        test.AddChild(test1, 0, 0);
+        //test1.Clear('-');
+        test.Print();
+
+        // return cursor position to end 
+    }
 }
