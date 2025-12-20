@@ -19,7 +19,8 @@ namespace MonopolyConsole.Core.BoardComponents
             BoardSize = tiles.Length;
             for (int i = 0; i < BoardSize; i++)
             {
-                Map.Add(this[i].Name, i);
+                // Handle same key
+                //Map.Add(this[i].Name, i);
             }
         }
 

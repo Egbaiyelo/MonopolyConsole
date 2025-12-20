@@ -51,5 +51,7 @@ namespace MonopolyConsole.Core.Interfaces
         void CollectFromAllPlayers(Player receiver, int amount);
 
         void PayPropertyRepairCosts(Player receiver, int houseCost, int hotelCost);
+
+        bool GameEnded();
     }
 }

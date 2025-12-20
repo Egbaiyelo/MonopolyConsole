@@ -18,11 +18,15 @@ namespace MonopolyConsole.App
         // deals with players, engine deals with game
 
         Player[] Players;
+        GameEngine GameEngine;
         IPrompter HumanPrompter;
         IPrompter BotPrompter;
 
-        internal void StartGame()
+        internal void SetupGame()
         {
+            GameEngine = new GameEngine();
+            HumanPrompter = new HumanConsolePrompter();
+
             int intResponse;
 
             // How many players, names
@@ -35,22 +39,37 @@ namespace MonopolyConsole.App
             //intResponse = int.Parse(Console.ReadLine());
             //Players = new Player[intResponse];
 
-            HumanPrompter = new HumanConsolePrompter();
-
             // Introduce themselves, if bots, then bots get names too later in different loop
             for (int i = 0; i < Players.Length; i++) 
             {
                 // ask name
-                Console.WriteLine($"Player {i}, What is your name => ");
+                Console.WriteLine($"Player {i + 1}, What is your name => ");
                 Players[i] = new Player();
                 Players[i].Name = Console.ReadLine();
             }
+
+            GameEngine.SetupGame(HumanPrompter);
+
         }
 
         // acknowledge players, loop turns
-        void run()
+        public void Run()
         {
+            // Acknowledge players
+            for (int i = 0; i < Players.Length; i++)
+            {
+                Console.WriteLine($"Welcome Player {i + 1}, {Players[i].Name}");
+            }
 
+            while (!GameEngine.GameEnded())
+            {
+                for (int i = 0; i < Players.Length;i++)
+                {
+                    GameEngine.ProcessTurn(Players[i]);
+                    Console.WriteLine("Press Enter to move on");
+                    Console.ReadLine();
+                }
+            }
         }
     }
 }

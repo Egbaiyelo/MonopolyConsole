@@ -54,14 +54,16 @@ namespace MonopolyConsole.App
                 case Tile.TileType.Property:
                     if (tile.Deed.Owner != null)
                     {
-                        HandlePayment(player, tile.Deed.Owner, tile.Deed.Rent);
+                        //HandlePayment(player, tile.Deed.Owner, tile.Deed.Rent);
                     }
                     else if (CanBuyProperty(player, tile.Deed))
                     {
-                        
+                        //
                     }
                     break;
                 case Tile.TileType.Card:
+                    break;
+                case Tile.TileType.Action:
                     break;
 
                 // Jail (Just visiting), free parking
@@ -168,6 +170,11 @@ namespace MonopolyConsole.App
         public void PayPropertyRepairCosts(Player receiver, int houseCost, int hotelCost)
         {
             throw new NotImplementedException();
+        }
+
+        public bool GameEnded()
+        {
+            return false;
         }
     }
 }
