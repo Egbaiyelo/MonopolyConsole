@@ -12,25 +12,27 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.App
 {
+    /// <summary>
+    /// 
+    /// </summary>
     internal class GameEngine : IGameEngine
     {
+        public bool GameEnded = false;
+
         DiceRoller DiceRoller;
-        IPrompter ConsolePrompter;
         Board Board;
         GameDataService GameDataService;
 
         public GameEngine()
         {
-            //SetupGame();
+            DiceRoller = new DiceRoller();
+            GameDataService = new GameDataService();
+
         }
 
 
-        public void SetupGame(IPrompter prompter)
+        public void SetupGame()
         {
-            DiceRoller = new DiceRoller();
-            ConsolePrompter = prompter;
-            GameDataService = new GameDataService();
-
             // Board setup
             var tiles = GameDataService.LoadTiles().ToArray();
             Board = new Board(tiles);
@@ -42,12 +44,12 @@ namespace MonopolyConsole.App
 
             if (player.InJail)
             {
-                ConsolePrompter.Notify(player, "You are in Jail");
+                player.Prompter.Notify(player, "You are in Jail");
                 //HandleJail();
                 return;
             }
 
-            ConsolePrompter.Notify(player, $"You rolled {roll}");
+            player.Prompter.Notify(player, $"You rolled {roll}");
 
             MovePlayer(player, roll);
 
@@ -84,7 +86,7 @@ namespace MonopolyConsole.App
                 case Tile.TileType.Action:
                     if (tile.Group == Tile.TileGroup.GoToJail)
                     {
-                        ConsolePrompter.Notify(player, "Go to Jail!!!");
+                        player.Prompter.Notify(player, "Go to Jail!!!");
                         //+ Get location dynamically later
                         //+ Jail player somehow
                         player.InJail = true;
@@ -93,11 +95,11 @@ namespace MonopolyConsole.App
                     }
                     else if (tile.Group == Tile.TileGroup.FreeParking)
                     {
-                        ConsolePrompter.Notify(player, "Free parking");
+                        player.Prompter.Notify(player, "Free parking");
                     }
                     else if (tile.Group == Tile.TileGroup.Go)
                     {
-                        ConsolePrompter.Notify(player, "You landed on Go");
+                        player.Prompter.Notify(player, "You landed on Go");
                     }
                     break;
 
@@ -108,26 +110,21 @@ namespace MonopolyConsole.App
                     {
                         if (player.InJail)
                         {
-                            ConsolePrompter.Notify(player, "Just visiting Jail");
+                            player.Prompter.Notify(player, "Just visiting Jail");
                         }
                         else
                         {
-                            ConsolePrompter.Notify(player, "You are in Jail");
+                            player.Prompter.Notify(player, "You are in Jail");
                         }
                     }
                     break;
             }
         }
 
-
-
-
-
         public void BuyProperty(Player player, Property property)
         {
             throw new NotImplementedException();
         }
-
         public bool CanBuyProperty(Player player, Property property)
         {
             if (property == null)
@@ -183,13 +180,13 @@ namespace MonopolyConsole.App
             if (player.Position + steps > Board.BoardSize)
             {
                 player.Balance += 200;
-                ConsolePrompter.Notify(player, $"You get $200!");
+                player.Prompter.Notify(player, $"You get $200!");
             }
 
             // Update Player position
             player.Position += steps;
             player.Position %= Board.BoardSize;
-            ConsolePrompter.Notify(player, $"You have landed on {Board[player.Position].Name}");
+            player.Prompter.Notify(player, $"You have landed on {Board[player.Position].Name}");
 
             // Handle landing
             ProcessLanding(player, Board[player.Position]);
@@ -218,9 +215,5 @@ namespace MonopolyConsole.App
             throw new NotImplementedException();
         }
 
-        public bool GameEnded()
-        {
-            return false;
-        }
     }
 }

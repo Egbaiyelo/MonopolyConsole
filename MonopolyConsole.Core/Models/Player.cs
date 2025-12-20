@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonopolyConsole.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,9 +25,11 @@ namespace MonopolyConsole.Core.Models
 
         public int NoJailFreeCards = 0;
 
-        public Player()
-        {
+        public IPrompter Prompter { get; set; } 
 
+        public Player(IPrompter prompter)
+        {
+            Prompter = prompter;
         }
 
 
