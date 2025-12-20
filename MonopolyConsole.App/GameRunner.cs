@@ -43,7 +43,7 @@ namespace MonopolyConsole.App
                 // ask name
                 Console.WriteLine($"Player {i}, What is your name => ");
                 Players[i] = new Player();
-                Players[i].Name = 
+                Players[i].Name = Console.ReadLine();
             }
         }
 

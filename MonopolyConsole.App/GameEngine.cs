@@ -1,5 +1,5 @@
 ﻿using MonopolyConsole.App.Prompters;
-using MonopolyConsole.Core.Board;
+using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
 using MonopolyConsole.Core.Services;
@@ -91,6 +91,7 @@ namespace MonopolyConsole.App
             if (property.Price > player.Balance)
                 return false;
             
+            return true;    
         }
 
         public void EndTurn()
