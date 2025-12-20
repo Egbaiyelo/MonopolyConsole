@@ -14,7 +14,7 @@ namespace MonopolyConsole.Core.Interfaces
     public interface IGameEngine
     {
 
-        void SetupGame(IPrompter prompter);
+        void SetupGame();
 
         // Logic for a player's turn (roll dice, process landing)
         void ProcessTurn(Player player);
@@ -52,6 +52,5 @@ namespace MonopolyConsole.Core.Interfaces
 
         void PayPropertyRepairCosts(Player receiver, int houseCost, int hotelCost);
 
-        bool GameEnded();
     }
 }
