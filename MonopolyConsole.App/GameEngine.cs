@@ -2,6 +2,7 @@
 using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
+using MonopolyConsole.Core.Models.GameActions;
 using MonopolyConsole.Core.Services;
 using MonopolyConsole.Data;
 using System;
@@ -127,6 +128,34 @@ namespace MonopolyConsole.App
             }
         }
 
+        public void HandleGameActions(GameAction g)
+        {
+            switch (g)
+            {
+                case PayTax p:
+                    HandlePayment(p.Player, null, p.Amount);
+                    break;
+                case PayRent p:
+                    HandlePayment(p.Player, p.Property.Owner, p.Property.Rent);
+                    break;
+                case DrawChance chance:
+                    break;
+                case DrawChest chest:
+                    break;
+                case AskBuy a:
+                    break;
+                case GoToJail jail:
+                    break;
+                case Notify n:
+                    n.Player.Prompter.Notify(n.Player, n.Message);
+                    break;
+                case Nothing n:
+                    break;
+
+            }
+
+        }
+
         public void BuyProperty(Player player, Property property)
         {
             throw new NotImplementedException();
@@ -167,6 +196,7 @@ namespace MonopolyConsole.App
 
         public void HandlePayment(Player payer, Player? recipient, int amount)
         {
+            if (recipient == null) // bank
             throw new NotImplementedException();
         }
 

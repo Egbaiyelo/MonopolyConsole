@@ -1,4 +1,5 @@
 ﻿using MonopolyConsole.Core.Models;
+using MonopolyConsole.Core.Models.GameActions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,37 +115,44 @@ namespace MonopolyConsole.Core.BoardComponents
             Group = group;
         }
 
-        public abstract void OnLand(Player playerdude);
+        public abstract GameAction OnLand(Player playerdude);
     }
 
     public class PropertyTile : Tile
     {
-
         public Property? Deed;
-
 
         public PropertyTile(int index, string name, TileGroup group, Property deed) : base(index, name, group)
         {
             Deed = deed;
         }
 
-        public override void OnLand(Player player)
+        public override GameAction OnLand(Player player)
         {
             // pay rent or buy property
 
             if (Deed.Owner != null)
             {
-                // Pay rent
+                if (Deed.Owner == player)
+                {
+                    return new PayRent(player, Deed);
+                }
+                // Nothing;
             }
             else
             {
                 // Buy
                 if (Deed.Price < player.Balance)
                 {
-
+                    return new AskBuy(player, Deed);
+                }
+                else
+                {
+                    return new Notify(player, $"You dont have enough funds to purchase {Name}");
                 }
                 //+ No auction maybe
             }
+            return new Nothing();
         }
 
         public bool CanBuyProperty(Player player)
