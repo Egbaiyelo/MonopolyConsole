@@ -1,5 +1,5 @@
 ﻿using MonopolyConsole.Core.Models;
-using MonopolyConsole.Core.Models.GameActions;
+using MonopolyConsole.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,7 +135,7 @@ namespace MonopolyConsole.Core.BoardComponents
             {
                 if (Deed.Owner == player)
                 {
-                    return new PayRent(player, Deed);
+                    return new PayRent(Deed);
                 }
                 // Nothing;
             }
@@ -144,11 +144,11 @@ namespace MonopolyConsole.Core.BoardComponents
                 // Buy
                 if (Deed.Price < player.Balance)
                 {
-                    return new AskBuy(player, Deed);
+                    return new AskBuy(Deed);
                 }
                 else
                 {
-                    return new Notify(player, $"You dont have enough funds to purchase {Name}");
+                    return new Notify($"You dont have enough funds to purchase {Name}");
                 }
                 //+ No auction maybe
             }
@@ -170,15 +170,17 @@ namespace MonopolyConsole.Core.BoardComponents
     public class ActionTile : Tile
     {
         private readonly Action<Player> _specialAction;
+        private readonly GameAction _gameAction;
 
-        public ActionTile(int index, string name, TileGroup group, Action<Player> action) : base(index, name, group)
+        public ActionTile(int index, string name, TileGroup group, GameAction gameAction) : base(index, name, group)
         {
-            _specialAction = action;
+            _gameAction = gameAction;
         }
 
-        public override void OnLand(Player player)
+        public override GameAction OnLand(Player player)
         {
             // Invoke action on player
+            return _gameAction;
         }
     }
 }

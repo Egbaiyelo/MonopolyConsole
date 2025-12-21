@@ -2,7 +2,7 @@
 using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
-using MonopolyConsole.Core.Models.GameActions;
+using MonopolyConsole.Core.Models;
 using MonopolyConsole.Core.Services;
 using MonopolyConsole.Data;
 using System;
@@ -20,6 +20,7 @@ namespace MonopolyConsole.App
 
     //+ Might split into bank board and runner maybe
     //+ if player roll double
+    //+ join moveplayer and moveplayerto
     internal class GameEngine : IGameEngine
     {
         public bool GameEnded = false;
@@ -69,14 +70,14 @@ namespace MonopolyConsole.App
                 case Tile.TileType.Tax:
                     break;
                 case Tile.TileType.Property:
-                    if (tile.Deed.Owner != null)
-                    {
-                        //HandlePayment(player, tile.Deed.Owner, tile.Deed.Rent);
-                    }
-                    else if (CanBuyProperty(player, tile.Deed))
-                    {
-                        //
-                    }
+                    //if (tile.Deed.Owner != null)
+                    //{
+                    //    //HandlePayment(player, tile.Deed.Owner, tile.Deed.Rent);
+                    //}
+                    //else if (CanBuyProperty(player, tile.Deed))
+                    //{
+                    //    //
+                    //}
                     break;
                 case Tile.TileType.Card:
                     if (tile.Group == Tile.TileGroup.Chance)
@@ -128,27 +129,41 @@ namespace MonopolyConsole.App
             }
         }
 
-        public void HandleGameActions(GameAction g)
+        public void HandleGameActions(GameAction g, Player player)
         {
             switch (g)
             {
                 case PayTax p:
-                    HandlePayment(p.Player, null, p.Amount);
+                    HandlePayment(player, null, p.Amount);
                     break;
+
                 case PayRent p:
-                    HandlePayment(p.Player, p.Property.Owner, p.Property.Rent);
+                    HandlePayment(player, p.Property.Owner, p.Property.Rent);
                     break;
-                case DrawChance chance:
+
+                case DrawChance:
+                    Card chance = Board.ChanceDeck.Dequeue();
+                    chance.Effect?.Invoke(player, this);
+                    Board.ChanceDeck.Enqueue(chance);
                     break;
-                case DrawChest chest:
+
+                case DrawChest:
+                    Card chest = Board.CommunityChestDeck.Dequeue();
+                    chest.Effect?.Invoke(player, this);
+                    Board.CommunityChestDeck.Enqueue(chest);
                     break;
+
                 case AskBuy a:
                     break;
-                case GoToJail jail:
+
+                case GoToJail:
+                    
                     break;
+
                 case Notify n:
-                    n.Player.Prompter.Notify(n.Player, n.Message);
+                    player.Prompter.Notify(player, n.Message);
                     break;
+
                 case Nothing n:
                     break;
 
