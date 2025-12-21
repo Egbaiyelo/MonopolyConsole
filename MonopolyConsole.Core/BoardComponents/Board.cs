@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MonopolyConsole.Core.Models;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +13,31 @@ namespace MonopolyConsole.Core.BoardComponents
     {
         private readonly Tile[] tiles;
         public readonly int BoardSize;
+
+        // Cards
+        public Queue<Card> ChanceDeck;
+        public Queue<Card> CommunityChestDeck;
+
         public Dictionary<string, int> Map = new Dictionary<string, int>();
 
-        public Board(Tile[] tiles) 
+        public Board(Tile[] tiles, List<Card> chances, List<Card> communityChests) 
         { 
             this.tiles = tiles;
             BoardSize = tiles.Length;
-            for (int i = 0; i < BoardSize; i++)
-            {
-                // Handle same key
-                //Map.Add(this[i].Name, i);
-            }
+
+            // Cards
+            var shuffledChances = chances.OrderBy(x => Random.Shared.Next()).ToList();
+            ChanceDeck = new Queue<Card>(shuffledChances);
+
+            var shuffledCommunityChests = communityChests.OrderBy(x => Random.Shared.Next()).ToList();
+            CommunityChestDeck = new Queue<Card>(shuffledCommunityChests);
+
+
+            //for (int i = 0; i < BoardSize; i++)
+            //{
+            //    // Handle same key
+            //    //Map.Add(this[i].Name, i);
+            //}
         }
 
         public Tile this[int index] { get { return tiles[index]; } }

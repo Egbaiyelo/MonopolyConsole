@@ -10,7 +10,7 @@ namespace MonopolyConsole.Core.BoardComponents
     /// <summary>
     /// Monopoly Tiles
     /// </summary>
-    public class Tile
+    public abstract class Tile
     {
         public enum TileGroup
         {
@@ -53,7 +53,7 @@ namespace MonopolyConsole.Core.BoardComponents
             Property, 
 
             // go to jail, go, free parking
-            Action, 
+            Corner, 
 
             // Jail
             Jail
@@ -62,11 +62,12 @@ namespace MonopolyConsole.Core.BoardComponents
         public int Index;
         public string Name { get; set; }
 
+        private readonly Action<Player> _specialAction;
+
         // The group the tile belongs to, the type is infered from the group
         public TileGroup Group;
-        public Property? Deed;
-        public Card? Card;
 
+        //+ Maybe cache this later
         public TileType Type
         {
             get
@@ -74,9 +75,9 @@ namespace MonopolyConsole.Core.BoardComponents
                 return Group switch
                 {
                     // Action Tiles
-                    TileGroup.Go => TileType.Action,
-                    TileGroup.GoToJail => TileType.Action,
-                    TileGroup.FreeParking => TileType.Action,
+                    TileGroup.Go => TileType.Corner,
+                    TileGroup.GoToJail => TileType.Corner,
+                    TileGroup.FreeParking => TileType.Corner,
 
                     // Jail (special Action)
                     TileGroup.Jail => TileType.Jail,
@@ -106,13 +107,70 @@ namespace MonopolyConsole.Core.BoardComponents
             }
         }
 
-
-        public Tile(int index, string name, TileGroup group, Property? deed)
+        public Tile(int index, string name, TileGroup group)
         {
             Index = index;
             Name = name;
             Group = group;
+        }
+
+        public abstract void OnLand(Player playerdude);
+    }
+
+    public class PropertyTile : Tile
+    {
+
+        public Property? Deed;
+
+
+        public PropertyTile(int index, string name, TileGroup group, Property deed) : base(index, name, group)
+        {
             Deed = deed;
+        }
+
+        public override void OnLand(Player player)
+        {
+            // pay rent or buy property
+
+            if (Deed.Owner != null)
+            {
+                // Pay rent
+            }
+            else
+            {
+                // Buy
+                if (Deed.Price < player.Balance)
+                {
+
+                }
+                //+ No auction maybe
+            }
+        }
+
+        public bool CanBuyProperty(Player player)
+        {
+            if (Deed.Owner != null)
+                return false;
+
+            if (Deed.Price > player.Balance)
+                return false;
+
+            return true;
+        }
+    }
+
+    public class ActionTile : Tile
+    {
+        private readonly Action<Player> _specialAction;
+
+        public ActionTile(int index, string name, TileGroup group, Action<Player> action) : base(index, name, group)
+        {
+            _specialAction = action;
+        }
+
+        public override void OnLand(Player player)
+        {
+            // Invoke action on player
         }
     }
 }

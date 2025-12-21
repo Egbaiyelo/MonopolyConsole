@@ -15,6 +15,10 @@ namespace MonopolyConsole.App
     /// <summary>
     /// 
     /// </summary>
+    /// 
+
+    //+ Might split into bank board and runner maybe
+    //+ if player roll double
     internal class GameEngine : IGameEngine
     {
         public bool GameEnded = false;
@@ -35,7 +39,9 @@ namespace MonopolyConsole.App
         {
             // Board setup
             var tiles = GameDataService.LoadTiles().ToArray();
-            Board = new Board(tiles);
+            Board = new Board(tiles, 
+                GameDataService.LoadChanceCards(), 
+                GameDataService.LoadCommunityChestCards());
         }
 
         public void ProcessTurn(Player player)
@@ -83,7 +89,7 @@ namespace MonopolyConsole.App
                     break;
 
                 // Jail (Just visiting), free parking, Go, 
-                case Tile.TileType.Action:
+                case Tile.TileType.Corner:
                     if (tile.Group == Tile.TileGroup.GoToJail)
                     {
                         player.Prompter.Notify(player, "Go to Jail!!!");
