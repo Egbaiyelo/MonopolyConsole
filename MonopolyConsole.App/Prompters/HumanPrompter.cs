@@ -29,7 +29,7 @@ namespace MonopolyConsole.App.Prompters
             int choice = 0;
             do
             {
-                Console.WriteLine("What do you choose =>");
+                Console.WriteLine($"What do you choose {0} - {options.Count - 1} =>");
                 string input = Console.ReadLine();
                 choice = int.Parse(input);
             } while (choice < 0 || choice > options.Count());
@@ -54,9 +54,9 @@ namespace MonopolyConsole.App.Prompters
             throw new NotImplementedException();
         }
 
-        public bool DecideToBuy(Property property, Player player)
+        public bool DecideToBuy(Player player, Property property)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public Property? GetPropertyToSellOrMortgage(Player player, decimal requiredCash)

@@ -28,9 +28,10 @@ namespace MonopolyConsole.Core.Models
         public IPrompter Prompter { get; set; } 
 
         // Maybe move prompter here somehow, just some methods
-        public Player(IPrompter prompter)
+        public Player(IPrompter prompter, int balance = 1500)
         {
             Prompter = prompter;
+            Balance = balance;
         }
 
 

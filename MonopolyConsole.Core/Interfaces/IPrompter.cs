@@ -31,7 +31,7 @@ namespace MonopolyConsole.Core.Interfaces
         //TradeProposal? PromptTrade(Player initiator);
 
         // The Core calls this method if the player lands on a property they can buy
-        bool DecideToBuy(Property property, Player player);
+        bool DecideToBuy(Player player, Property property);
 
         // The Core calls this method when a player needs to raise money (e.g., to pay rent).
         // Returns the property the player chooses to mortgage/sell, or null if they can't/won't.

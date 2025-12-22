@@ -31,7 +31,6 @@ namespace MonopolyConsole.Core.Interfaces
         Player GetCurrentPlayer();
 
 
-        bool CanBuyProperty(Player player, Property property);
         void BuyProperty(Player player, Property property);
         void EndTurn();
 
@@ -39,7 +38,6 @@ namespace MonopolyConsole.Core.Interfaces
         //Mortgage, sell, buy, build, demolish
         void HandlePayment(Player payer, Player? recipient, int amount);
         void HandleTrade(Player payer, Player? recipient, int amount);
-        bool IsBankrupt(Player player);
 
 
 
