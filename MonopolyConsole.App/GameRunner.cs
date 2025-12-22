@@ -23,7 +23,7 @@ namespace MonopolyConsole.App
         int CurrentPlayer = 0;
         bool IsSetup = false;
 
-        internal void SetupGame()
+        internal void SetupRunner()
         {
             GameEngine = new GameEngine();
             var humanPrompter = new HumanConsolePrompter();
@@ -33,7 +33,7 @@ namespace MonopolyConsole.App
             // How many players, names
             Console.WriteLine("How many players are in the game => ");
             intResponse = int.Parse(Console.ReadLine());
-            Players = new List<Player>(intResponse);
+            Players = new List<Player>();
 
             // How many bots - none for now
             //Console.WriteLine("How many bots are in the game => ");
@@ -41,16 +41,17 @@ namespace MonopolyConsole.App
             //Players = new Player[intResponse];
 
             // Introduce themselves, if bots, then bots get names too later in different loop
-            for (int i = 0; i < Players.Count; i++) 
+            for (int i = 0; i < intResponse; i++) 
             {
                 // ask name
                 Console.WriteLine($"Player {i + 1}, What is your name => ");
-                Players[i] = new Player(humanPrompter);
-                Players[i].Name = Console.ReadLine();
+                var player = new Player(humanPrompter);
+                player.Name = Console.ReadLine();
+                Players.Add(player);
             }
 
             GameEngine.SetupGame();
-
+            IsSetup = true;
         }
 
         // acknowledge players, loop turns
@@ -58,7 +59,7 @@ namespace MonopolyConsole.App
         {
             if (!IsSetup)
             {
-                SetupGame();
+                SetupRunner();
             }
 
 

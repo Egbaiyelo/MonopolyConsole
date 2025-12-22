@@ -129,9 +129,9 @@ namespace MonopolyConsole.App
             }
         }
 
-        public void HandleGameActions(GameAction g, Player player)
+        public void HandleGameActions(GameAction gameAction, Player player)
         {
-            switch (g)
+            switch (gameAction)
             {
                 case PayTax p:
                     HandlePayment(player, null, p.Amount);
@@ -143,21 +143,29 @@ namespace MonopolyConsole.App
 
                 case DrawChance:
                     Card chance = Board.ChanceDeck.Dequeue();
+                    player.Prompter.Notify(player, chance.Description);
                     chance.Effect?.Invoke(player, this);
                     Board.ChanceDeck.Enqueue(chance);
                     break;
 
                 case DrawChest:
                     Card chest = Board.CommunityChestDeck.Dequeue();
+                    player.Prompter.Notify(player, chest.Description);
                     chest.Effect?.Invoke(player, this);
                     Board.CommunityChestDeck.Enqueue(chest);
                     break;
 
-                case AskBuy a:
+                case AskBuy ask:
+                    var prop = ask.Property;
+                    int response = player.Prompter.ChooseOption(player, $"Do you want to buy {prop.Name} for {prop.Price}?", new List<string>() { "Yes", "No" });
+                    HandlePayment(player, null, prop.Price);
+                    prop.Owner = player;
                     break;
 
                 case GoToJail:
-                    
+                    player.InJail = true;
+                    //+ set the board getter to get jail dynamically later
+                    player.Position = 10;
                     break;
 
                 case Notify n:
@@ -174,19 +182,6 @@ namespace MonopolyConsole.App
         public void BuyProperty(Player player, Property property)
         {
             throw new NotImplementedException();
-        }
-        public bool CanBuyProperty(Player player, Property property)
-        {
-            if (property == null)
-                return false;
-
-            if (property.Owner != null)
-                return false;
-
-            if (property.Price > player.Balance)
-                return false;
-            
-            return true;    
         }
 
         public void EndTurn()
@@ -211,8 +206,27 @@ namespace MonopolyConsole.App
 
         public void HandlePayment(Player payer, Player? recipient, int amount)
         {
-            if (recipient == null) // bank
-            throw new NotImplementedException();
+            amount = Math.Abs(amount);
+            payer.Balance -= amount;
+            //+ Maybe throw amount to bank -> ensure not negative
+
+            if (recipient != null) recipient.Balance += amount;
+
+            if (payer.Balance < 0)
+            {
+                if (payer.NetWorth < 0)
+                {
+                    //IsBankrupt(payer);
+                    payer.IsBankrupt = true;   
+                    // Remove player somehow
+                    payer.Prompter.Notify(payer, $"You have an outstanding debt of {Math.Abs(payer.Balance)}, you are now bankrupt!");
+                }
+                else
+                {
+                    //Later
+                }
+            }
+
         }
 
         public void HandleTrade(Player payer, Player? recipient, int amount)
@@ -220,40 +234,34 @@ namespace MonopolyConsole.App
             throw new NotImplementedException();
         }
 
-        public bool IsBankrupt(Player player)
-        {
-            throw new NotImplementedException();
-        }
+        //public bool IsBankrupt(Player player)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public void MovePlayer(Player player, int steps)
         {
+              MovePlayerTo(player, player.Position + steps);
+        }
+
+        public void MovePlayerTo(Player player, int tileIndex)
+        {
+            tileIndex %= Board.BoardSize;
+
             // If player passed go
-            if (player.Position + steps > Board.BoardSize)
+            if (player.Position > tileIndex)
             {
                 player.Balance += 200;
                 player.Prompter.Notify(player, $"You get $200!");
             }
 
             // Update Player position
-            player.Position += steps;
-            player.Position %= Board.BoardSize;
-            player.Prompter.Notify(player, $"You have landed on {Board[player.Position].Name}");
-
-            // Handle landing
-            ProcessLanding(player, Board[player.Position]);
-        }
-
-        public void MovePlayerTo(Player player, int tileIndex)
-        {
-            // If player passed go
-            if (player.Position > tileIndex)
-                player.Balance += 200;
-
-            // Update Player position
             player.Position = tileIndex;
+            var landedTile = Board[player.Position];
+            player.Prompter.Notify(player, $"You have landed on {landedTile.Name}");
 
             // Handle landing
-            ProcessLanding(player, Board[player.Position]);
+            HandleGameActions(landedTile.OnLand(player), player);
         }
 
         public void CollectFromAllPlayers(Player receiver, int amount)

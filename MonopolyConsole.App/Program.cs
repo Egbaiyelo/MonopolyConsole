@@ -8,7 +8,7 @@ public class Solution
         //new GameEngine
         var game = new GameRunner();
 
-        game.SetupGame();
+        game.SetupRunner();
         game.Run();
 
         //Query -> create players, numof, names, state them
