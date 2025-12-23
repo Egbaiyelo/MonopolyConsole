@@ -24,7 +24,7 @@ namespace MonopolyConsole.App.Prompters
             Console.WriteLine(prompt);
             for (int i = 0; i < options.Count; i++)
             {
-                Console.WriteLine($"{i} => ", options[i]);
+                Console.WriteLine($"{i} => " + options[i]);
             }
 
             int choice = 0;
@@ -70,6 +70,7 @@ namespace MonopolyConsole.App.Prompters
             throw new NotImplementedException();
         }
 
+        //+ could technically return list of actions but need to process them first so nothing bad happens (state is always updated)
         public PlayerAction Decision(Player player)
         {
             // Options
@@ -85,33 +86,30 @@ namespace MonopolyConsole.App.Prompters
             };
             string response = "";
 
-            do
+   
+            if (player.Properties.Count > 0)
+                options.Add(manageProperty);
+
+            response = ReturnOption(player, "What will you like to do?", options);
+
+            switch (response)
             {
-                if (player.Properties.Count > 0)
-                    options.Add(manageProperty);
+                case endTurn:
+                    return new EndTurn();
+                    break;
 
-                response = ReturnOption(player, "What will you like to do?", options);
+                case trade:
+                    //+ Implement
+                    return new EndTurn();
+                    break;
 
-                switch (response)
-                {
-                    case endTurn:
-                        return new EndTurn();
-                        break;
+                case manageProperty:
+                    return GetPropertyToManage(player);
+                    break;
+                default:
+                    return new EndTurn();
+            }
 
-                    case trade:
-                        //+ Implement
-                        return new EndTurn();
-                        break;
-
-                    case manageProperty:
-                        return GetPropertyToManage(player);
-                        break;
-
-                    default:
-                        return new EndTurn();
-                }
-
-            } while (response != endTurn);
         }
 
         public PlayerAction GetPropertyToManage(Player player)
@@ -139,7 +137,7 @@ namespace MonopolyConsole.App.Prompters
             if (subj.Houses > 0)
                 manageoptions.Add(sellHouse);
 
-            if (subj.IsMortgaged)
+            if (subj.IsMortgaged && player.Balance > (int)(subj.Price / 2) + 10)
                 manageoptions.Add(unMortgage);
             if (!subj.IsMortgaged && subj.Houses == 0)
                 manageoptions.Add(mortgage);

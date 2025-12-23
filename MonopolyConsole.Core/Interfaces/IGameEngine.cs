@@ -32,7 +32,6 @@ namespace MonopolyConsole.Core.Interfaces
 
 
         void BuyProperty(Player player, Property property);
-        void EndTurn();
 
         //Maybe make trading system?
         //Mortgage, sell, buy, build, demolish

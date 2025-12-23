@@ -19,8 +19,8 @@ namespace MonopolyConsole.Core.Services
 
         public int Roll()
         {
-            Val1 = _random.Next(7);
-            Val2 = _random.Next(7);
+            Val1 = _random.Next(1,6);
+            Val2 = _random.Next(1,6);
             return Total;
         }
     }

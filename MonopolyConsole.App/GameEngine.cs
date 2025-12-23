@@ -69,7 +69,11 @@ namespace MonopolyConsole.App
             player.Prompter.Notify(player, $"Your balance is now {player.Balance}");
 
             // Ask player what they want to do next?
-            var action = player.Prompter.Decision(player);
+            PlayerAction action = new EndTurn();
+            do
+            {
+                action = player.Prompter.Decision(player);
+            } while (action != new EndTurn());
         }
 
         public void ProcessLanding(Player player, Tile tile)
@@ -168,6 +172,7 @@ namespace MonopolyConsole.App
                     int response = player.Prompter.ChooseOption(player, $"Do you want to buy {prop.Name} for {prop.Price}?", new List<string>() { "Yes", "No" });
                     HandlePayment(player, null, prop.Price);
                     prop.Owner = player;
+                    player.Properties.Add(prop);
                     break;
 
                 case GoToJail:
@@ -189,16 +194,33 @@ namespace MonopolyConsole.App
 
         public void HandlePlayerActions(Player player, PlayerAction playerAction)
         {
-
+            switch (playerAction)
+            {
+                case EndTurn:
+                    break;
+                case BuildHouse p:
+                    HandlePayment(player, null, 50);
+                    p.p.Houses++;
+                    break;
+                case SellHouse s:
+                    player.Balance += 25;
+                    s.p.Houses--;
+                    break;
+                case Mortgage m:
+                    m.p.IsMortgaged = true;
+                    player.Balance += (int)(m.p.Price / 2);
+                    break;
+                case UnMortgage m:
+                    HandlePayment(player, null, (int)(m.p.Price / 2) + 10);
+                    m.p.IsMortgaged = false;
+                    break;
+                default:
+                    break;
+            }
         }
 
 
         public void BuyProperty(Player player, Property property)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EndTurn()
         {
             throw new NotImplementedException();
         }
