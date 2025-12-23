@@ -1,4 +1,5 @@
-﻿using MonopolyConsole.Core.Interfaces;
+﻿using MonopolyConsole.Core.BoardComponents;
+using MonopolyConsole.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,14 @@ namespace MonopolyConsole.Core.Models
         public PlayerType Type { get; set; }
         public string Name;
         public int Balance;
-        public int NetWorth;
+        public int NetWorth
+        {
+            get
+            {
+                var assets = Properties.Sum(p => p.Price / 2 + 25 * p.Houses);
+                return Balance + assets;
+            }
+        }
         public int Position;
 
         public int NoStationsOwned;
@@ -24,6 +32,8 @@ namespace MonopolyConsole.Core.Models
         public bool IsBankrupt = false;
 
         public int NoJailFreeCards = 0;
+
+        public List<Property> Properties;
 
         public IPrompter Prompter { get; set; } 
 

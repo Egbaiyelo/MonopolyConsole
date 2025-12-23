@@ -28,12 +28,13 @@ namespace MonopolyConsole.App
         DiceRoller DiceRoller;
         Board Board;
         GameDataService GameDataService;
+        IEnumerable<Player> Players;
 
-        public GameEngine()
+        public GameEngine(IEnumerable<Player> players)
         {
             DiceRoller = new DiceRoller();
             GameDataService = new GameDataService();
-
+            Players = players;
         }
 
 
@@ -56,12 +57,19 @@ namespace MonopolyConsole.App
                 //HandleJail();
                 return;
             }
+            if ( player.IsBankrupt)
+            {
+                player.Prompter.Notify(player, $"You have an outstanding debt of {Math.Abs(player.Balance)}");
+            }
 
             player.Prompter.Notify(player, $"You rolled {roll}");
 
             MovePlayer(player, roll);
 
+            player.Prompter.Notify(player, $"Your balance is now {player.Balance}");
+
             // Ask player what they want to do next?
+            player.Prompter.
         }
 
         public void ProcessLanding(Player player, Tile tile)
@@ -218,26 +226,24 @@ namespace MonopolyConsole.App
                 {
                     //IsBankrupt(payer);
                     payer.IsBankrupt = true;   
-                    // Remove player somehow
                     payer.Prompter.Notify(payer, $"You have an outstanding debt of {Math.Abs(payer.Balance)}, you are now bankrupt!");
+                    // Remove player somehow
                 }
                 else
                 {
                     //Later
+                    payer.Prompter.HandleBankruptcy(payer);
                 }
             }
 
         }
 
+        
+
         public void HandleTrade(Player payer, Player? recipient, int amount)
         {
             throw new NotImplementedException();
         }
-
-        //public bool IsBankrupt(Player player)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public void MovePlayer(Player player, int steps)
         {
@@ -264,14 +270,28 @@ namespace MonopolyConsole.App
             HandleGameActions(landedTile.OnLand(player), player);
         }
 
+
+        // Chances/Chests
         public void CollectFromAllPlayers(Player receiver, int amount)
         {
-            throw new NotImplementedException();
+            foreach(var player in Players)
+            {
+                if (player != receiver)
+                {
+                    HandlePayment(player, receiver, amount);
+                }
+            }
         }
 
-        public void PayPropertyRepairCosts(Player receiver, int houseCost, int hotelCost)
+        public void PayPropertyRepairCosts(Player payer, int houseCost, int hotelCost)
         {
-            throw new NotImplementedException();
+            foreach (var prop in payer.Properties)
+            {
+                if (prop.Houses == 5)
+                    HandlePayment(payer, null, hotelCost);
+                if (prop.Houses > 0 && prop.Houses < 5)
+                    HandlePayment(payer, null, houseCost);
+            }
         }
 
     }

@@ -7,9 +7,18 @@ using MonopolyConsole.Core.BoardComponents;
 
 namespace MonopolyConsole.Core.Models
 {
+    public abstract record PlayerAction;
+
+    public record Buy(Property p) : PlayerAction;
+    public record Mortgage(Property p) : PlayerAction;
+    public record Sell(Property p) : PlayerAction;
+    public record EndTurn(Property p) : PlayerAction;
+    public record Trade(Player p) : PlayerAction;
+
+
     internal class PlayerActionStrategy
     {
-        public enum PlayerAction { Buy, Mortgage, Sell, EndTurn, None, Trade }
+        public enum PlayerAction { Buy, Mortgage, Sell, EndTurn, Trade }
 
         public interface IPlayerStrategy
         {

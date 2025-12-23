@@ -46,7 +46,7 @@ namespace MonopolyConsole.App.Prompters
 
         public void HandleBankruptcy(Player player)
         {
-            throw new NotImplementedException();
+
         }
 
         public void PromptSellOrMortgage(Player player, int amountNeeded)
@@ -63,5 +63,7 @@ namespace MonopolyConsole.App.Prompters
         {
             throw new NotImplementedException();
         }
+
+        public PlayerAction 
     }
 }
