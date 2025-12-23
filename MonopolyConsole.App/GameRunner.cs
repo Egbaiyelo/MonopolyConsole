@@ -25,7 +25,6 @@ namespace MonopolyConsole.App
 
         internal void SetupRunner()
         {
-            GameEngine = new GameEngine();
             var humanPrompter = new HumanConsolePrompter();
 
             int intResponse;
@@ -50,6 +49,7 @@ namespace MonopolyConsole.App
                 Players.Add(player);
             }
 
+            GameEngine = new GameEngine(Players);
             GameEngine.SetupGame();
             IsSetup = true;
         }

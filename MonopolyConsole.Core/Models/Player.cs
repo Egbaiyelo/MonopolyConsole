@@ -42,6 +42,7 @@ namespace MonopolyConsole.Core.Models
         {
             Prompter = prompter;
             Balance = balance;
+            Properties = new List<Property>();
         }
 
 

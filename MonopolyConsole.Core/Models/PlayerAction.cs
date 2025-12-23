@@ -9,11 +9,13 @@ namespace MonopolyConsole.Core.Models
 {
     public abstract record PlayerAction;
 
-    public record Buy(Property p) : PlayerAction;
+    public record UnMortgage(Property p) : PlayerAction;
     public record Mortgage(Property p) : PlayerAction;
-    public record Sell(Property p) : PlayerAction;
-    public record EndTurn(Property p) : PlayerAction;
-    public record Trade(Player p) : PlayerAction;
+    public record SellHouse(Property p) : PlayerAction;
+    public record BuildHouse(Property p) : PlayerAction;
+
+    public record EndTurn() : PlayerAction;
+    public record Trade() : PlayerAction;
 
 
     internal class PlayerActionStrategy

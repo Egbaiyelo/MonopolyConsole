@@ -10,7 +10,7 @@ namespace MonopolyConsole.Core.Interfaces
 {
     public interface IPrompter
     {
-        public enum PlayerAction { Buy, Mortgage, Sell, EndTurn, None, Trade }
+        //public enum PlayerAction { Buy, Mortgage, Sell, EndTurn, None, Trade }
 
 
         // Confirm selection?
@@ -25,6 +25,7 @@ namespace MonopolyConsole.Core.Interfaces
         void HandleBankruptcy(Player player);
         void PromptSellOrMortgage(Player player, int amountNeeded);
 
+        PlayerAction Decision(Player player);
 
 
         // Trading 

@@ -21,6 +21,7 @@ namespace MonopolyConsole.Core.BoardComponents
         }
 
         public int Houses;
+        public bool IsMortgaged;
 
         public Player? Owner;
 

@@ -69,7 +69,7 @@ namespace MonopolyConsole.App
             player.Prompter.Notify(player, $"Your balance is now {player.Balance}");
 
             // Ask player what they want to do next?
-            player.Prompter.
+            var action = player.Prompter.Decision(player);
         }
 
         public void ProcessLanding(Player player, Tile tile)
@@ -186,6 +186,12 @@ namespace MonopolyConsole.App
             }
 
         }
+
+        public void HandlePlayerActions(Player player, PlayerAction playerAction)
+        {
+
+        }
+
 
         public void BuyProperty(Player player, Property property)
         {
