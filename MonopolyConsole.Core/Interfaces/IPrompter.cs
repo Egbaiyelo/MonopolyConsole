@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Core.Interfaces
 {
+    /// <summary>
+    /// Ensures player returns valid decisions
+    /// </summary>
     public interface IPrompter
     {
         //public enum PlayerAction { Buy, Mortgage, Sell, EndTurn, None, Trade }
