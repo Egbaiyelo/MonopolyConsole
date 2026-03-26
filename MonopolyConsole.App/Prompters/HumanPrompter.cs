@@ -122,7 +122,7 @@ namespace MonopolyConsole.App.Prompters
 
             if (player.Properties.Count < 1)
             {
-                player.Prompter.Notify(player, $"You have no properties to manage");
+                Notify(player, $"You have no properties to manage");
                 return new EndTurn();
             }
 

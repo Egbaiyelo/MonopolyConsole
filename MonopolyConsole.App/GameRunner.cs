@@ -44,12 +44,12 @@ namespace MonopolyConsole.App
             {
                 // ask name
                 Console.WriteLine($"Player {i + 1}, What is your name => ");
-                var player = new Player(humanPrompter);
+                var player = new Player();
                 player.Name = Console.ReadLine();
                 Players.Add(player);
             }
 
-            GameEngine = new GameEngine(Players);
+            GameEngine = new GameEngine(Players, new HumanConsolePrompter());
             GameEngine.SetupGame();
             IsSetup = true;
         }

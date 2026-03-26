@@ -29,12 +29,14 @@ namespace MonopolyConsole.App
         Board Board;
         GameDataService GameDataService;
         IEnumerable<Player> Players;
+        IPrompter Prompter;
 
-        public GameEngine(IEnumerable<Player> players)
+        public GameEngine(IEnumerable<Player> players, IPrompter prompter)
         {
             DiceRoller = new DiceRoller();
             GameDataService = new GameDataService();
             Players = players;
+            Prompter = prompter;
         }
 
 
@@ -53,26 +55,26 @@ namespace MonopolyConsole.App
 
             if (player.InJail)
             {
-                player.Prompter.Notify(player, "You are in Jail");
+                Prompter.Notify(player, "You are in Jail");
                 //HandleJail();
                 return;
             }
             if ( player.IsBankrupt)
             {
-                player.Prompter.Notify(player, $"You have an outstanding debt of {Math.Abs(player.Balance)}");
+                Prompter.Notify(player, $"You have an outstanding debt of {Math.Abs(player.Balance)}");
             }
 
-            player.Prompter.Notify(player, $"You rolled {roll}");
+            Prompter.Notify(player, $"You rolled {roll}");
 
             MovePlayer(player, roll);
 
-            player.Prompter.Notify(player, $"Your balance is now {player.Balance}");
+            Prompter.Notify(player, $"Your balance is now {player.Balance}");
 
             // Ask player what they want to do next?
             PlayerAction action = new EndTurn();
             do
             {
-                action = player.Prompter.Decision(player);
+                action = Prompter.Decision(player);
             } while (action != new EndTurn());
         }
 
@@ -106,7 +108,7 @@ namespace MonopolyConsole.App
                 case Tile.TileType.Corner:
                     if (tile.Group == Tile.TileGroup.GoToJail)
                     {
-                        player.Prompter.Notify(player, "Go to Jail!!!");
+                        Prompter.Notify(player, "Go to Jail!!!");
                         //+ Get location dynamically later
                         //+ Jail player somehow
                         player.InJail = true;
@@ -115,11 +117,11 @@ namespace MonopolyConsole.App
                     }
                     else if (tile.Group == Tile.TileGroup.FreeParking)
                     {
-                        player.Prompter.Notify(player, "Free parking");
+                        Prompter.Notify(player, "Free parking");
                     }
                     else if (tile.Group == Tile.TileGroup.Go)
                     {
-                        player.Prompter.Notify(player, "You landed on Go");
+                        Prompter.Notify(player, "You landed on Go");
                     }
                     break;
 
@@ -130,11 +132,11 @@ namespace MonopolyConsole.App
                     {
                         if (player.InJail)
                         {
-                            player.Prompter.Notify(player, "Just visiting Jail");
+                            Prompter.Notify(player, "Just visiting Jail");
                         }
                         else
                         {
-                            player.Prompter.Notify(player, "You are in Jail");
+                            Prompter.Notify(player, "You are in Jail");
                         }
                     }
                     break;
@@ -155,21 +157,21 @@ namespace MonopolyConsole.App
 
                 case DrawChance:
                     Card chance = Board.ChanceDeck.Dequeue();
-                    player.Prompter.Notify(player, chance.Description);
+                    Prompter.Notify(player, chance.Description);
                     chance.Effect?.Invoke(player, this);
                     Board.ChanceDeck.Enqueue(chance);
                     break;
 
                 case DrawChest:
                     Card chest = Board.CommunityChestDeck.Dequeue();
-                    player.Prompter.Notify(player, chest.Description);
+                    Prompter.Notify(player, chest.Description);
                     chest.Effect?.Invoke(player, this);
                     Board.CommunityChestDeck.Enqueue(chest);
                     break;
 
                 case AskBuy ask:
                     var prop = ask.Property;
-                    int response = player.Prompter.ChooseOption(player, $"Do you want to buy {prop.Name} for {prop.Price}?", new List<string>() { "Yes", "No" });
+                    int response = Prompter.ChooseOption(player, $"Do you want to buy {prop.Name} for {prop.Price}?", new List<string>() { "Yes", "No" });
                     HandlePayment(player, null, prop.Price);
                     prop.Owner = player;
                     player.Properties.Add(prop);
@@ -182,7 +184,7 @@ namespace MonopolyConsole.App
                     break;
 
                 case Notify n:
-                    player.Prompter.Notify(player, n.Message);
+                    Prompter.Notify(player, n.Message);
                     break;
 
                 case Nothing n:
@@ -254,13 +256,13 @@ namespace MonopolyConsole.App
                 {
                     //IsBankrupt(payer);
                     payer.IsBankrupt = true;   
-                    payer.Prompter.Notify(payer, $"You have an outstanding debt of {Math.Abs(payer.Balance)}, you are now bankrupt!");
+                    Prompter.Notify(payer, $"You have an outstanding debt of {Math.Abs(payer.Balance)}, you are now bankrupt!");
                     // Remove player somehow
                 }
                 else
                 {
                     //Later
-                    payer.Prompter.HandleBankruptcy(payer);
+                    Prompter.HandleBankruptcy(payer);
                 }
             }
 
@@ -286,13 +288,13 @@ namespace MonopolyConsole.App
             if (player.Position > tileIndex)
             {
                 player.Balance += 200;
-                player.Prompter.Notify(player, $"You get $200!");
+                Prompter.Notify(player, $"You get $200!");
             }
 
             // Update Player position
             player.Position = tileIndex;
             var landedTile = Board[player.Position];
-            player.Prompter.Notify(player, $"You have landed on {landedTile.Name}");
+                Prompter.Notify(player, $"You have landed on {landedTile.Name}");
 
             // Handle landing
             HandleGameActions(landedTile.OnLand(player), player);

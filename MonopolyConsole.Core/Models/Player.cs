@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Core.Models
 {
+    /// <summary>
+    /// Player data class, //- maybe rename player data
+    /// </summary>
     public class Player
     {
         public enum PlayerType { Human, Bot }
-
         public PlayerType Type { get; set; }
         public string Name;
         public int Balance;
@@ -35,16 +37,12 @@ namespace MonopolyConsole.Core.Models
 
         public List<Property> Properties;
 
-        public IPrompter Prompter { get; set; } 
-
         // Maybe move prompter here somehow, just some methods
-        public Player(IPrompter prompter, int balance = 1500)
+        public Player(int balance = 1500)
         {
-            Prompter = prompter;
             Balance = balance;
             Properties = new List<Property>();
         }
-
 
     }
 }
