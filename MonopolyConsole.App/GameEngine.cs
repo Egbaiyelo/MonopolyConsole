@@ -2,7 +2,6 @@
 using MonopolyConsole.Core.BoardComponents;
 using MonopolyConsole.Core.Interfaces;
 using MonopolyConsole.Core.Models;
-using MonopolyConsole.Core.Models;
 using MonopolyConsole.Core.Services;
 using MonopolyConsole.Data;
 using System;
@@ -75,6 +74,7 @@ namespace MonopolyConsole.App
             do
             {
                 action = Prompter.Decision(player);
+                HandlePlayerActions(player, action);
             } while (action != new EndTurn());
         }
 
@@ -172,9 +172,12 @@ namespace MonopolyConsole.App
                 case AskBuy ask:
                     var prop = ask.Property;
                     int response = Prompter.ChooseOption(player, $"Do you want to buy {prop.Name} for {prop.Price}?", new List<string>() { "Yes", "No" });
-                    HandlePayment(player, null, prop.Price);
-                    prop.Owner = player;
-                    player.Properties.Add(prop);
+                    if (response == 0)
+                    {
+                        HandlePayment(player, null, prop.Price);
+                        prop.Owner = player;
+                        player.Properties.Add(prop);
+                    }
                     break;
 
                 case GoToJail:
