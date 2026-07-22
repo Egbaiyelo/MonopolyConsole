@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.Core.Services
 {
-    public class DiceRoller
+    public interface IDiceRoller
     {
-        Random _random = new Random();
+        DiceResult Roll();
+    }
 
-        int Val1;
-        int Val2;
-        public int Total { get => Val1 + Val2; }
-        bool IsDoubles { get => Val1 == Val2; }
+    public record DiceResult(int die1, int die2)
+    {
+        public int Total => die1 + die2;
+        public bool IsDoubles => die1 == die2;
+    }
 
+    public class DiceRoller : IDiceRoller
+    {
         public DiceRoller() { }
 
-        public int Roll()
+        private readonly Random _random = new();
+
+        public DiceResult Roll()
         {
-            Val1 = _random.Next(1,6);
-            Val2 = _random.Next(1,6);
-            return Total;
+            return new DiceResult(_random.Next(1, 7), _random.Next(1, 7));
         }
     }
 }

@@ -42,6 +42,9 @@ namespace MonopolyConsole.Core.Models
         {
             Balance = balance;
             Properties = new List<Property>();
+
+            //- why not
+            Position = 0;
         }
 
     }

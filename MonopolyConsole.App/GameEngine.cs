@@ -21,19 +21,21 @@ namespace MonopolyConsole.App
     //+ Might split into bank board and runner maybe
     //+ if player roll double
     //+ join moveplayer and moveplayerto
-    internal class GameEngine : IGameEngine
+    public class GameEngine : IGameEngine
     {
         public bool GameEnded = false;
 
-        DiceRoller DiceRoller;
-        Board Board;
-        GameDataService GameDataService;
-        IEnumerable<Player> Players;
-        IPrompter Prompter;
+        // Game engine services
+        readonly IDiceRoller DiceRoller;
+        Board Board; //- make readonly
+        readonly GameDataService GameDataService;
+        IPrompter Prompter;  
 
-        public GameEngine(IEnumerable<Player> players, IPrompter prompter)
+        IEnumerable<Player> Players;
+
+        public GameEngine(IEnumerable<Player> players, IPrompter prompter, IDiceRoller diceRoller)
         {
-            DiceRoller = new DiceRoller();
+            DiceRoller = diceRoller;
             GameDataService = new GameDataService();
             Players = players;
             Prompter = prompter;
@@ -51,7 +53,7 @@ namespace MonopolyConsole.App
 
         public void ProcessTurn(Player player)
         {
-            int roll = DiceRoller.Roll();
+            int roll = DiceRoller.Roll().Total;
 
             if (player.InJail)
             {
