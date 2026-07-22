@@ -19,7 +19,7 @@ namespace MonopolyConsole.Core.Models
 
         public Card(CardType cardType, string desc, Action<Player, IGameEngine> effect, bool isImmediate)
         {
-            Type = CardType.Chance;
+            Type = cardType;
             Description = desc;
             Effect = effect;
             IsImmediate = isImmediate;

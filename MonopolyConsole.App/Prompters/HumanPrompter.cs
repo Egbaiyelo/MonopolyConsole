@@ -71,18 +71,21 @@ namespace MonopolyConsole.App.Prompters
         }
 
         //+ could technically return list of actions but need to process them first so nothing bad happens (state is always updated)
+        //+ rename to something better like turn decision
         public PlayerAction Decision(Player player)
         {
             // Options
             const string endTurn = "End Turn";
             const string trade = "Trade with a player";
             const string manageProperty = "Manage property";
+            const string viewStats = "View Stats";
 
 
             var options = new List<string>()
             {
                 endTurn,
                 trade,
+                viewStats,
             };
             string response = "";
 
@@ -106,6 +109,12 @@ namespace MonopolyConsole.App.Prompters
                 case manageProperty:
                     return GetPropertyToManage(player);
                     break;
+
+                case viewStats:
+                    //+ Implement
+                    return new EndTurn();
+                    break;
+
                 default:
                     return new EndTurn();
             }

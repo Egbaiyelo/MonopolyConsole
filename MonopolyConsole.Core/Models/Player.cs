@@ -34,6 +34,8 @@ namespace MonopolyConsole.Core.Models
         public bool IsBankrupt = false;
 
         public int NoJailFreeCards = 0;
+        public int doubleRolls = 0;
+        public int rollOutOfJailAttempts = 0;
 
         public List<Property> Properties;
 
