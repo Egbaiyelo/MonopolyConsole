@@ -67,10 +67,13 @@ namespace MonopolyConsole.App
         {
             DiceResult diceRoll = DiceRoller.Roll();
             int rollValue = diceRoll.Total;
+
+            // Double roll jail
             if (diceRoll.IsDoubles)
             {
                 player.doubleRolls++;
                 if (player.doubleRolls > 2) HandleGameActions(new GoToJail(), player);
+                return;
             }
 
             // Lose conditions
@@ -104,6 +107,7 @@ namespace MonopolyConsole.App
         {
             switch (tile.Type) {
                 case Tile.TileType.Tax:
+                    //HandlePayment(player, null, tile.)
                     break;
                 case Tile.TileType.Property:
                     //if (tile.Deed.Owner != null)
