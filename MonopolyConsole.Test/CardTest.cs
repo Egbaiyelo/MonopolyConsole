@@ -21,7 +21,7 @@ namespace MonopolyConsole.Test
         {
             _mockEngine = new Mock<IGameEngine>();
             _dataService = new GameDataService();
-            _testPlayer = new Player("TestPlayer") { Balance = 1000, NoJailFreeCards = 0 };
+            _testPlayer = new Player() { Name = "player",  Balance = 1000, NoJailFreeCards = 0 };
         }
 
         #region Card Core Tests

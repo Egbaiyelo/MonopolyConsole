@@ -281,6 +281,9 @@ namespace MonopolyConsole.App
             // Player can pay 50, or they can roll but not double, there is a double roll counter.
             throw new NotImplementedException();
         }
+
+        #endregion
+
         public void BuyProperty(Player player, Property property)
         {
             throw new NotImplementedException();
