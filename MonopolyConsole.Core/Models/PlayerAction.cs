@@ -13,9 +13,10 @@ namespace MonopolyConsole.Core.Models
     public record Mortgage(Property p) : PlayerAction;
     public record SellHouse(Property p) : PlayerAction;
     public record BuildHouse(Property p) : PlayerAction;
+    public record Trade(Property p) : PlayerAction;
+    //- add masstrade? multiple at once?
 
     public record EndTurn() : PlayerAction;
-    public record Trade() : PlayerAction;
 
 
     internal class PlayerActionStrategy

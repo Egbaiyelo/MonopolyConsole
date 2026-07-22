@@ -26,7 +26,7 @@ namespace MonopolyConsole.App
 
         // Game engine services
         readonly IDiceRoller DiceRoller;
-        Board Board; //- make readonly
+        Board Board; //- make readonly, but how to restart?
         readonly GameDataService GameDataService;
         IPrompter Prompter;  
 
@@ -38,37 +38,56 @@ namespace MonopolyConsole.App
             GameDataService = new GameDataService();
             Players = players;
             Prompter = prompter;
-        }
 
-
-        public void SetupGame()
-        {
             // Board setup
             var tiles = GameDataService.LoadTiles().ToArray();
-            Board = new Board(tiles, 
-                GameDataService.LoadChanceCards(), 
+            Board = new Board(tiles,
+                GameDataService.LoadChanceCards(),
                 GameDataService.LoadCommunityChestCards());
         }
 
+
+        //- Why would I need to setup game separately?
+        // Maybe make so that it just remakes the game?
+        public void SetupGame()
+        {
+
+        }
+
+
+        // Turn based Management
+        #region TurnBased Handling
+
+
+        /// <summary>
+        /// Manages a player's turn
+        /// </summary>
+        /// <param name="player">The player whose turn it is</param>
         public void ProcessTurn(Player player)
         {
-            int roll = DiceRoller.Roll().Total;
+            DiceResult diceRoll = DiceRoller.Roll();
+            int rollValue = diceRoll.Total;
+            if (diceRoll.IsDoubles)
+            {
+                player.doubleRolls++;
+                if (player.doubleRolls > 2) HandleGameActions(new GoToJail(), player);
+            }
 
+            // Lose conditions
             if (player.InJail)
             {
                 Prompter.Notify(player, "You are in Jail");
-                //HandleJail();
+                HandleJail();
                 return;
             }
             if ( player.IsBankrupt)
             {
                 Prompter.Notify(player, $"You have an outstanding debt of {Math.Abs(player.Balance)}");
+                HandlePayment(player, null, Math.Abs(player.Balance));
             }
 
-            Prompter.Notify(player, $"You rolled {roll}");
-
-            MovePlayer(player, roll);
-
+            Prompter.Notify(player, $"You rolled {rollValue}");
+            MovePlayer(player, rollValue);
             Prompter.Notify(player, $"Your balance is now {player.Balance}");
 
             // Ask player what they want to do next?
@@ -79,6 +98,7 @@ namespace MonopolyConsole.App
                 HandlePlayerActions(player, action);
             } while (action != new EndTurn());
         }
+
 
         public void ProcessLanding(Player player, Tile tile)
         {
@@ -145,6 +165,16 @@ namespace MonopolyConsole.App
             }
         }
 
+        #endregion
+
+
+        #region Game and Player Event Handling
+
+        /// <summary>
+        /// Handles Game actions in the game
+        /// </summary>
+        /// <param name="gameAction">A game action</param>
+        /// <param name="player">The player who invokes the action</param>
         public void HandleGameActions(GameAction gameAction, Player player)
         {
             switch (gameAction)
@@ -177,6 +207,7 @@ namespace MonopolyConsole.App
                     if (response == 0)
                     {
                         HandlePayment(player, null, prop.Price);
+                        //- How to tell if they did end up paying?
                         prop.Owner = player;
                         player.Properties.Add(prop);
                     }
@@ -184,6 +215,7 @@ namespace MonopolyConsole.App
 
                 case GoToJail:
                     player.InJail = true;
+                    player.doubleRolls = 0;
                     //+ set the board getter to get jail dynamically later
                     player.Position = 10;
                     break;
@@ -199,15 +231,20 @@ namespace MonopolyConsole.App
 
         }
 
+        /// <summary>
+        /// Handles player actions in the game
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="playerAction"></param>
         public void HandlePlayerActions(Player player, PlayerAction playerAction)
         {
             switch (playerAction)
             {
                 case EndTurn:
                     break;
-                case BuildHouse p:
+                case BuildHouse property:
                     HandlePayment(player, null, 50);
-                    p.p.Houses++;
+                    property.p.Houses++;
                     break;
                 case SellHouse s:
                     player.Balance += 25;
@@ -221,12 +258,25 @@ namespace MonopolyConsole.App
                     HandlePayment(player, null, (int)(m.p.Price / 2) + 10);
                     m.p.IsMortgaged = false;
                     break;
+                case Trade t:
+                    HandleTrade(player, t.p);
+                    break;
                 default:
                     break;
             }
         }
 
+        private void HandleTrade(Player player, Property p)
+        {
+            // Ask the other player if they want to trade
+            throw new NotImplementedException();
+        }
 
+        private void HandleJail()
+        {
+            // Player can pay 50, or they can roll but not double, there is a double roll counter.
+            throw new NotImplementedException();
+        }
         public void BuyProperty(Player player, Property property)
         {
             throw new NotImplementedException();

@@ -10,7 +10,10 @@ using System.Threading.Tasks;
 
 namespace MonopolyConsole.App
 {
-    // 
+    /// <summary>
+    /// Manages Game initialization and looping
+    /// Handles the Game Engine, Player creation and Bot creation and integration
+    /// </summary>
     internal class GameRunner
     {
         //load game, save game, 
